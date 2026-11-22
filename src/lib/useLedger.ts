@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createDemoState } from './demo';
+import { HOSTED_DEMO } from './hosted-demo';
 import { applyDebtOffset, createBet } from './ledger';
 import { api, ApiError } from './client';
 import { hadSession, rememberSession } from './session-hint';
@@ -78,7 +79,7 @@ async function demoSchemas() {
 }
 
 export function useLedger() {
-  const demo = new URLSearchParams(window.location.search).get('demo') === '1';
+  const demo = HOSTED_DEMO || new URLSearchParams(window.location.search).get('demo') === '1';
   const storageKey = demoStorageKey(window.location.search);
   const [state, setState] = useState<LedgerState | null>(null);
   const stateRef = useRef<LedgerState | null>(null);

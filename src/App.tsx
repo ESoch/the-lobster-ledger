@@ -38,6 +38,7 @@ import { useBackDismiss } from './lib/useBackDismiss';
 import { needsAction } from './lib/ledger';
 import { api, ApiError } from './lib/client';
 import { demoStorageKey } from './lib/client-state';
+import { HOSTED_DEMO, PROJECT_URL } from './lib/hosted-demo';
 import { downloadFile, exportCsv, exportFilename, exportJson, exportPricesCsv } from './lib/export';
 import { STORAGE_FULL_WARNING } from './lib/client-state';
 import { forgetSession } from './lib/session-hint';
@@ -784,9 +785,9 @@ export default function App() {
       })
       .catch(() => showToast(SIGN_OUT_FAILED_TOAST, 'error'));
   }
-  // Leaving is a plain page load: the welcome page offers the demo again, and the demo ledger stays.
+  const exitDemoLabel = HOSTED_DEMO ? 'View on GitHub' : 'Exit demo';
   function exitDemo() {
-    window.location.assign('/');
+    window.location.assign(HOSTED_DEMO ? PROJECT_URL : '/');
   }
   // The demo keeps its sample ledger in this browser under a key per demoSession; dropping that key
   // and reloading gives back the stock sample bets. The theme choice is not part of the demo.
@@ -828,7 +829,7 @@ export default function App() {
           },
           {
             key: 'exit',
-            label: 'Exit demo',
+            label: exitDemoLabel,
             icon: <LogOut size={17} aria-hidden="true" />,
             onSelect: exitDemo,
           },
@@ -967,8 +968,8 @@ export default function App() {
             </span>
             <button
               className="icon-button"
-              aria-label={demo ? 'Exit demo' : 'Sign out'}
-              title={demo ? 'Exit demo' : 'Sign out'}
+              aria-label={demo ? exitDemoLabel : 'Sign out'}
+              title={demo ? exitDemoLabel : 'Sign out'}
               onClick={demo ? exitDemo : signOut}
             >
               <LogOut size={16} />

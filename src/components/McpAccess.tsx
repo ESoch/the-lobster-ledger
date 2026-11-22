@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { AppWindow, ArrowRight, LifeBuoy, ShieldCheck } from 'lucide-react';
+import { EXAMPLE_LEDGER_ORIGIN, HOSTED_DEMO, SELF_HOSTING_URL } from '../lib/hosted-demo';
 import { CopyBlock, InlineCommand } from './CopyBlock';
 import { GuidePanel, NewTabLink, SignInUnavailable } from './CliAccess';
 import { READ_TOOL_COUNT, WRITE_TOOL_COUNT } from '../../worker/mcp-tool-catalog';
@@ -23,8 +24,9 @@ export function McpGuide({
 }) {
   const [client, setClient] = useState<'claude' | 'claude-code' | 'codex'>('claude');
   const [write, setWrite] = useState(false);
-  const https = new URL(origin).protocol === 'https:';
-  const base = https ? new URL(origin).origin : 'https://your-ledger.example';
+  const ledger = new URL(HOSTED_DEMO ? EXAMPLE_LEDGER_ORIGIN : origin);
+  const https = ledger.protocol === 'https:';
+  const base = https ? ledger.origin : 'https://your-ledger.example';
   const endpoint = `${base}/mcp`;
   const scope = write ? 'ledger:read ledger:write' : 'ledger:read';
   const claudeConfig = JSON.stringify({ type: 'http', url: endpoint, oauth: { scopes: scope } });
@@ -44,8 +46,17 @@ export function McpGuide({
       </header>
       {demo && (
         <p className="connection-notice" role="status">
-          This demo cannot connect an AI app. Open your <a href="/">live ledger</a> to authorize a
-          real account.
+          {HOSTED_DEMO ? (
+            <>
+              To connect an AI app, <a href={SELF_HOSTING_URL}>set up your own ledger</a> and
+              replace <code>{EXAMPLE_LEDGER_ORIGIN}</code> in the examples with its address.
+            </>
+          ) : (
+            <>
+              This demo cannot connect an AI app. Open your <a href="/">live ledger</a> to authorize
+              a real account.
+            </>
+          )}
         </p>
       )}
       {!https && (
