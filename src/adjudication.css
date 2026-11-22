@@ -1,0 +1,518 @@
+.bet-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  display: block;
+}
+.map-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  height: 480px;
+  color: #566557;
+  background: #edf2e9;
+  border-radius: 9px;
+  font-size: 12px;
+}
+.map-loading-compact {
+  height: 100%;
+  min-height: 200px;
+}
+html[data-theme='dark'] .map-loading {
+  color: var(--muted);
+}
+/* The sidebar (and the phone drawer, which is the same element) is a column: the brand and workspace
+   card at the top, the footer pinned at the bottom, and only the navigation between them scrolls. */
+.sidebar {
+  overflow: hidden;
+  /* The sidebar's own colour (styles.css, theme.css), for the covers of the scroll shadows below. */
+  --sidebar-surface: #fbfcf9;
+  --sidebar-scroll-shadow: #153b3e40;
+}
+html[data-theme='dark'] .sidebar {
+  --sidebar-surface: #152224;
+  --sidebar-scroll-shadow: #000000b3;
+}
+.sidebar > .brand,
+.sidebar > .workspace-switch,
+.sidebar > .nav-label,
+.sidebar > .sidebar-bottom {
+  flex-shrink: 0;
+}
+.sidebar > nav {
+  flex: 1 1 auto;
+  min-height: 0;
+  /* Room inside the scroller for the focus rings of the first, last and widest items: the padding at
+     rest, and the scroll padding when the browser scrolls a focused edge link into view. */
+  margin: 0 -8px;
+  padding: 6px 8px;
+  scroll-padding-block: 6px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  /* When the links do not all fit, a shadow at the top or bottom edge says more links lie that way.
+     The two covers scroll with the links and hide each shadow once its end is in view; the two
+     shadows stay at the edges. Links that fit show no shadow at all. */
+  background:
+    linear-gradient(var(--sidebar-surface) 40%, transparent) center top / 100% 36px no-repeat local,
+    linear-gradient(transparent, var(--sidebar-surface) 60%) center bottom / 100% 36px no-repeat
+      local,
+    radial-gradient(farthest-side at 50% 0, var(--sidebar-scroll-shadow), transparent) center top /
+      100% 14px no-repeat scroll,
+    radial-gradient(farthest-side at 50% 100%, var(--sidebar-scroll-shadow), transparent) center
+      bottom / 100% 14px no-repeat scroll;
+}
+@media (forced-colors: active) {
+  .sidebar > nav {
+    background: none;
+  }
+}
+/* On a shorter window the house-rule card folds into one row, the shield and How it works, like
+   Invite a member below it, and the links above get its room. The heading is clipped to its shield:
+   its words, at their usual size, stay for screen readers. */
+@media (max-height: 800px) {
+  .sidebar .house-rule {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 12px;
+  }
+  .sidebar .house-rule > span {
+    flex-shrink: 0;
+    width: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .sidebar .house-rule > span > svg {
+    flex-shrink: 0;
+  }
+  .sidebar .house-rule button {
+    flex: 1;
+  }
+}
+/* Shorter still (a laptop's browser window, a small phone's drawer), Invite a member joins that row
+   as a button that reads "Invite" beside its people icon: touch has no hover to show a tooltip, so
+   its label stays on screen, and the rest of its name ("a member") stays for screen readers. The
+   shield gives way to make room, and How it works keeps to one line beside it. The workspace card,
+   which below 880px shows only the group's name and so repeats the brand unless the group has its
+   own, stays for screen readers only. All ten links then fit down to about 660px. */
+@media (max-height: 720px) {
+  .sidebar > .workspace-switch,
+  .sidebar .house-rule > span,
+  .sidebar .invite-sidebar .invite-rest {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .sidebar > .sidebar-bottom {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 4px;
+    align-items: center;
+  }
+  .sidebar > .sidebar-bottom > .sidebar-profile {
+    grid-column: 1 / -1;
+  }
+  .sidebar .house-rule {
+    gap: 6px;
+    padding: 0 4px 0 10px;
+  }
+  .sidebar .house-rule button {
+    padding-right: 0;
+  }
+  .sidebar .house-rule button > svg {
+    display: none;
+  }
+  .sidebar .invite-sidebar {
+    width: auto;
+    gap: 5px;
+    padding: 0 8px;
+    white-space: nowrap;
+  }
+  .sidebar .invite-sidebar > svg:last-child {
+    display: none;
+  }
+}
+/* A landscape phone cannot spare the height for a pinned footer: the whole column scrolls instead. */
+@media (max-height: 520px) {
+  .sidebar {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .sidebar > nav {
+    flex: none;
+    overflow: visible;
+    background: none;
+  }
+}
+.bet-table thead,
+.bet-table tbody {
+  display: block;
+}
+.bet-table th {
+  text-align: left;
+  font-weight: 500;
+}
+.bet-table th,
+.bet-table td {
+  padding: 0;
+  min-width: 0;
+}
+.bet-row {
+  cursor: pointer;
+}
+.bet-title-cell {
+  padding: 0;
+  width: 100%;
+  text-align: left;
+}
+.adjudication-method {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e6edde;
+}
+.adjudication-method > svg {
+  color: #647d58;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.adjudication-method strong {
+  font-size: 13px;
+  font-weight: 700;
+}
+.adjudication-method p {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.75;
+}
+.prompt-record {
+  border: 1px solid #dce7d3;
+  background: #f9fcf5;
+  border-radius: 8px;
+  padding: 18px;
+  margin-top: 20px;
+}
+.prompt-record > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #567246;
+}
+.prompt-record h3 {
+  font-size: 13px;
+  font-weight: 700;
+  flex: 1;
+}
+.prompt-record > div:first-child > span {
+  font-size: 12px;
+  background: #e9f0e2;
+  padding: 3px 7px;
+  border-radius: 4px;
+}
+.prompt-record > p {
+  font-size: 12px;
+  color: #526047;
+  margin-top: 10px;
+  line-height: 1.7;
+}
+.prompt-record details {
+  margin-top: 12px;
+}
+.prompt-record summary {
+  font-size: 12px;
+  color: #526c43;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 0;
+  min-height: 40px;
+}
+.prompt-record pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    12px/1.9 Manrope,
+    sans-serif;
+  color: #4c6343;
+  margin: 7px 0 15px;
+  padding: 15px;
+  background: white;
+  border: 1px solid #e2ead8;
+  border-radius: 6px;
+  /* A refused copy focuses the prompt; the sheet's scroll padding keeps it clear of the pinned
+     heading (styles.css, .modal-content). */
+}
+/* A prompt awaiting approval shows in full. Once agreed it scrolls, and shadows show more text. */
+.prompt-record pre.prompt-text-capped {
+  --prompt-bg: #ffffff;
+  max-height: 350px;
+  overflow: auto;
+  background:
+    linear-gradient(var(--prompt-bg) 30%, transparent) center top / 100% 36px no-repeat local,
+    linear-gradient(transparent, var(--prompt-bg) 70%) center bottom / 100% 36px no-repeat local,
+    radial-gradient(farthest-side at 50% 0, #27393b33, transparent) center top / 100% 12px no-repeat
+      scroll,
+    radial-gradient(farthest-side at 50% 100%, #27393b33, transparent) center bottom / 100% 12px
+      no-repeat scroll,
+    var(--prompt-bg);
+}
+.prompt-record pre.prompt-text-capped:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+/* What a revision changed from the version before it: changed lines only, marked + and −. */
+.prompt-changes ul {
+  list-style: none;
+  margin: 7px 0 15px;
+  padding: 0;
+  background: white;
+  border: 1px solid #e2ead8;
+  border-radius: 6px;
+  font:
+    12px/1.7 Manrope,
+    sans-serif;
+  overflow: hidden;
+}
+.prompt-changes li {
+  display: flex;
+  gap: 9px;
+  padding: 3px 12px;
+  color: #4c6343;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.prompt-changes li > [aria-hidden='true'] {
+  flex: 0 0 10px;
+  font-weight: 700;
+}
+.prompt-changes .diff-added {
+  background: #eef6ea;
+  color: #24502c;
+}
+.prompt-changes .diff-removed {
+  background: #fbece8;
+  color: #8a2f22;
+}
+.prompt-changes .diff-gap {
+  color: var(--muted-strong);
+  font-style: italic;
+}
+.prompt-stale {
+  margin-top: 12px;
+  padding: 11px 13px;
+  border: 1px solid #ecd9ae;
+  border-left: 3px solid #b8892d;
+  border-radius: 6px;
+  background: #fbf3e2;
+}
+.prompt-stale p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #5f4205;
+}
+.prompt-stale .button {
+  margin-top: 9px;
+  min-height: 44px;
+}
+.prompt-signatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  list-style: none;
+  margin: 13px 0 0;
+  border-top: 1px solid #e1e9d7;
+  padding: 13px 0 0;
+}
+.prompt-signatures > li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #344c32;
+}
+.prompt-signatures > li.waiting {
+  color: var(--muted-strong);
+}
+.prompt-signatures small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.prompt-signatures svg {
+  margin-left: 2px;
+}
+.prompt-record > .prompt-superseded {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted-strong);
+}
+.adjudication-record {
+  border-left: 2px solid #8ea477;
+  padding: 3px 0 3px 17px;
+  margin: 22px 0;
+}
+.adjudication-record h3 {
+  font-size: 13px;
+  font-weight: 700;
+}
+/* The recommendation itself, ahead of the reasoning behind it. */
+.adjudication-record > .adjudication-verdict {
+  color: #344c32;
+  margin: 8px 0 0;
+}
+.adjudication-verdict strong {
+  font-weight: 700;
+}
+.adjudication-record > p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.85;
+  color: #56694c;
+  margin: 10px 0;
+}
+.adjudication-record > small {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted-strong);
+  display: block;
+}
+.adjudication-record > a {
+  display: flex;
+  width: fit-content;
+  gap: 7px;
+  align-items: center;
+  font-size: 12px;
+  color: #46673b;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* The one line that says the response is unverified: full-size text, with an icon. */
+.adjudication-record > .provenance-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #4f5d4b;
+  line-height: 1.7;
+}
+.adjudication-record > .provenance-note > svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+  color: #8a5a00;
+}
+/* The note under the buttons that the prompt still quotes evidence that came off the bet. */
+.next-action > .prompt-quote-note {
+  margin-top: 12px;
+}
+/* Revising an agreed prompt is a real action, so it reads as a link-style control. */
+.next-action > .revise-prompt {
+  color: #2f5a3d;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  min-height: 44px;
+  margin-top: 9px;
+  white-space: normal;
+}
+.next-action .prompt-hint,
+.next-action .prompt-version-note,
+.next-action .response-hint,
+.next-action .character-count {
+  font-size: 12px;
+}
+.next-action .response-over {
+  font-size: 13px;
+}
+.next-action .character-count {
+  margin-top: -6px;
+}
+.inline-action-form input {
+  border: 1px solid var(--field-border);
+  border-radius: 6px;
+  padding: 11px 12px;
+  min-height: 44px;
+  width: 100%;
+  color: #344c32;
+  background: var(--field-bg);
+  font-size: 14px;
+  /* Labels are bold; the text a member types is not, as in the select and textarea beside it. */
+  font-weight: 400;
+  line-height: 1.6;
+}
+.inline-action-form input::placeholder {
+  color: var(--muted-strong);
+}
+.inline-action-form .prompt-editor {
+  min-height: 300px;
+  line-height: 1.8;
+}
+/* The evidence a disagreement answers, as its author wrote it: line breaks kept, long links wrapped. */
+.inline-action-form .evidence-quote {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.next-action .form-error {
+  margin-top: 15px;
+}
+@media (min-width: 521px) and (max-width: 1000px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .stats-grid .stat-card:last-child {
+    display: block;
+  }
+}
+@media (max-width: 520px) {
+  .bet-table-head > th:nth-child(4) {
+    font-size: 12px;
+  }
+  .bet-table-head > th:nth-child(4):after {
+    content: none;
+  }
+  .inline-action-form input {
+    font-size: 16px;
+  }
+  .prompt-record {
+    padding: 16px;
+  }
+  .prompt-record pre {
+    font-size: 13px;
+    padding: 12px;
+  }
+  .prompt-record pre.prompt-text-capped {
+    max-height: 320px;
+  }
+  .prompt-changes ul {
+    font-size: 13px;
+  }
+  .action-buttons {
+    align-items: stretch;
+  }
+  /* The step's buttons share one full width; a wrapping row left each its own width. */
+  .next-action > .action-buttons {
+    flex-direction: column;
+  }
+  .next-action > .action-buttons > .button,
+  .next-action > .button {
+    width: 100%;
+  }
+  .next-action .button {
+    white-space: normal;
+    text-align: center;
+  }
+}

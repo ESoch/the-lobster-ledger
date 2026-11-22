@@ -1,0 +1,462 @@
+.market-page {
+  color: var(--text, #27393b);
+}
+.market-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+.market-intro p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--muted-strong);
+  margin: 0;
+  max-width: 690px;
+}
+.market-intro strong {
+  color: var(--text, #27393b);
+}
+.market-data-age {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 14px;
+  color: var(--green, #315b54);
+}
+.market-data-age.late {
+  color: var(--gold-text);
+}
+.market-update-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 18px;
+  font-size: 13px;
+  line-height: 1.7;
+  padding: 12px 16px;
+  border: 1px solid var(--border, #e4e8e1);
+  border-radius: 8px;
+  background: var(--surface, #fff);
+}
+.market-update-notice > svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--green, #315b54);
+}
+/* Late data is a warning, not body text: the gold tint and ink the app uses for warnings. */
+.market-update-notice.warning {
+  background: var(--status-gold-bg, #f8f2e6);
+  border-color: var(--status-gold-border, #e6d6b0);
+}
+.market-update-notice.warning > svg {
+  color: var(--gold-text);
+}
+.market-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+/* Between a phone and a laptop three cards are too narrow for their figures: two, then one across. */
+@media (min-width: 761px) and (max-width: 1000px) {
+  .market-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .market-summary-grid > .market-stat:last-child {
+    grid-column: 1 / -1;
+  }
+}
+.market-stat {
+  padding: 22px 24px;
+}
+.market-stat > span {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.market-stat > strong {
+  display: block;
+  /* A figure and its sign never break apart. */
+  white-space: nowrap;
+  margin: 12px 0 8px;
+  font:
+    500 36px/1.2 'Fraunces',
+    serif;
+}
+.market-stat small {
+  font:
+    500 14px 'Manrope',
+    sans-serif;
+  margin-left: 6px;
+  color: var(--muted-strong);
+}
+.market-stat p {
+  font-size: 12px;
+  margin: 0;
+  color: var(--muted-strong);
+}
+.market-chart-panel {
+  padding: 24px;
+}
+.market-chart-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+.market-chart-header h2,
+.market-source-panel h2 {
+  font-size: 20px;
+  margin: 0 0 7px;
+}
+.market-chart-header p,
+.market-source-panel p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted-strong);
+  margin: 0;
+}
+.market-range-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 24px 0 20px;
+}
+.market-range-controls button {
+  font-size: 12px;
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--border, #e4e8e1);
+  border-radius: 6px;
+  color: inherit;
+}
+.market-range-controls button:hover {
+  background: var(--surface-hover, #f6f9f2);
+}
+.market-range-controls button[aria-pressed='true'] {
+  background: var(--surface-selected, #eaf0e5);
+  color: var(--green, #315b54);
+  border-color: var(--green, #315b54);
+}
+.market-readout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 28px;
+  margin-bottom: 18px;
+}
+.market-readout strong {
+  font-size: 14px;
+}
+.market-readout strong span {
+  margin-left: 12px;
+  font-size: 19px;
+  color: var(--green, #315b54);
+}
+.market-preliminary {
+  padding: 4px 8px;
+  border-radius: 5px;
+  background: var(--status-gold-bg, #f8f2e6);
+  color: var(--gold-text);
+  font-size: 12px;
+}
+.market-plot {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 12px;
+}
+.market-y-axis {
+  position: relative;
+  height: 248px;
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+/* Each price sits level with its gridline: placed by value, not spread out evenly. */
+.market-y-axis span {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.market-plot-body {
+  min-width: 0;
+}
+/* Vertical swipes still scroll the page; taps and sideways drags inspect a year. */
+.market-plot-area {
+  position: relative;
+  height: 248px;
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+.market-plot-area svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+.market-grid-line {
+  stroke: var(--border, #e4e8e1);
+  stroke-width: 1;
+}
+.market-price-gradient stop {
+  stop-color: var(--green, #315b54);
+}
+.market-price-line {
+  stroke: var(--green, #315b54);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+/* A preliminary year may still be revised, so its stretch of the line is dashed. */
+.market-price-line.pending {
+  stroke-dasharray: 7 5;
+}
+.market-cursor-line {
+  stroke: var(--muted-strong);
+  stroke-width: 1;
+  stroke-dasharray: 4 5;
+}
+.market-marker {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--green, #315b54);
+  border: 2px solid var(--surface, #fff);
+  box-shadow: 0 0 0 1px var(--green, #315b54);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+/* An open point for each preliminary year; the inspected marker opens too when it is on one. */
+.market-point-pending {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--surface, #fff);
+  border: 2px solid var(--green, #315b54);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.market-marker.preliminary {
+  background: var(--surface, #fff);
+  border-color: var(--green, #315b54);
+}
+/* Each year label sits under its own point. */
+.market-x-axis {
+  position: relative;
+  height: 28px;
+  color: var(--muted-strong);
+  font-size: 12px;
+}
+.market-x-axis span {
+  position: absolute;
+  top: 8px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.market-x-axis .start {
+  transform: none;
+}
+.market-x-axis .end {
+  transform: translateX(-100%);
+}
+.market-year-control {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  font-size: 12px;
+  margin-top: 20px;
+}
+.market-year-value {
+  color: var(--green, #315b54);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.market-year-control input {
+  flex: 1 1 200px;
+  min-width: 0;
+  min-height: 44px;
+  accent-color: var(--green, #315b54);
+}
+.market-chart-caption {
+  color: var(--muted-strong);
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 14px 0 0;
+}
+.market-table-panel,
+.market-source-panel {
+  margin-top: 22px;
+}
+.market-table-panel summary {
+  padding: 20px 24px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+.market-table-panel summary span {
+  font-weight: 500;
+  color: var(--muted-strong);
+  margin-left: 10px;
+  font-size: 12px;
+}
+.market-table-scroll {
+  /* The edge cue's ink: a shade on the light card, a light one on the dark card below. */
+  --market-scroll-cue: rgb(0 0 0 / 0.16);
+  overflow: auto;
+  /* Seventy-six years would run the page on: the table scrolls inside its card, heading row in view. */
+  max-height: min(480px, 70vh);
+  /* A shadow at the right edge while more columns wait off-screen; it scrolls away at the end. */
+  background:
+    linear-gradient(to right, transparent, var(--surface, #fff) 70%) right center / 32px 100%
+      no-repeat local,
+    radial-gradient(farthest-side at 100% 50%, var(--market-scroll-cue), transparent) right center /
+      12px 100% no-repeat scroll;
+}
+html[data-theme='dark'] .market-table-scroll {
+  --market-scroll-cue: rgb(229 238 235 / 0.26);
+}
+.market-table-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.market-table-panel th,
+.market-table-panel td {
+  text-align: left;
+  padding: 14px 24px;
+  border-top: 1px solid var(--border, #e4e8e1);
+  white-space: nowrap;
+}
+/* Figures line up on the decimal point. */
+.market-table-panel td:not(:last-child),
+.market-table-panel thead th:not(:first-child):not(:last-child) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+/* The year stays in view while the figures scroll sideways, the heading row while the years scroll. */
+.market-table-panel tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--surface, #fff);
+}
+.market-table-panel thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface, #fff);
+  /* The rule under the headings travels with them; a collapsed border would scroll away. */
+  box-shadow: inset 0 -1px 0 var(--border, #e4e8e1);
+}
+.market-table-panel thead th:first-child {
+  left: 0;
+  z-index: 3;
+}
+.market-year-status {
+  display: none;
+}
+.market-table-panel thead th {
+  font-weight: 600;
+  color: var(--muted-strong);
+}
+.market-source-panel {
+  padding: 24px;
+}
+.market-source-panel ul {
+  padding-left: 18px;
+  margin: 16px 0;
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--muted-strong);
+}
+.market-source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.market-source-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--green, #315b54);
+  min-height: 44px;
+}
+@media (max-width: 760px) {
+  .market-intro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .market-summary-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .market-stat {
+    padding: 18px 20px;
+  }
+  .market-stat > strong {
+    font-size: 30px;
+    margin: 8px 0;
+  }
+  .market-chart-panel,
+  .market-source-panel {
+    padding: 18px 16px;
+  }
+  .market-range-controls {
+    gap: 5px;
+  }
+  .market-range-controls button {
+    padding: 8px 11px;
+  }
+  .market-plot {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 4px;
+  }
+  .market-table-panel summary {
+    padding: 18px 16px;
+  }
+  .market-table-panel th,
+  .market-table-panel td {
+    padding: 12px;
+  }
+  /* The Status column folds in under each year, so a phone shows every column that is left. */
+  .market-table-panel tr > :last-child {
+    display: none;
+  }
+  .market-year-status {
+    display: block;
+    margin-top: 2px;
+    font-weight: 500;
+    color: var(--muted-strong);
+  }
+  /* The links stack as ruled rows, so a third link never wraps into a loose line of its own. */
+  .market-source-links {
+    display: grid;
+    gap: 0;
+  }
+  .market-source-links a {
+    justify-content: space-between;
+    border-top: 1px solid var(--border, #e4e8e1);
+  }
+}
+/* At 380px and below 12px cells would push Landed value off the card (346px of table in 286px at
+   320): tighter cells, and headings that may take two lines, keep all four columns in view. */
+@media (max-width: 380px) {
+  .market-table-panel th,
+  .market-table-panel td {
+    padding-inline: 8px;
+  }
+  .market-table-panel thead th {
+    white-space: normal;
+  }
+}

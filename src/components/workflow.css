@@ -1,0 +1,663 @@
+.workflow-fields,
+.workflow-inset {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+/* A date and time with its timezone: one named pair, side by side when there is room. */
+.workflow-date-time {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+}
+/* What to know about the pair spans both columns, under the two fields. */
+.workflow-date-time > .date-note {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.workflow-fields {
+  padding-top: 20px;
+  border-top: 1px solid #e4e8e1;
+}
+.workflow-fields h3 {
+  font-size: 15px;
+  color: #153b3e;
+  font-weight: 700;
+}
+/* Records on the sheet share the sheet's section-heading size (13px), not the form's. */
+.workflow-record h3,
+.workflow-review h3 {
+  font-size: 13px;
+  color: #153b3e;
+  font-weight: 700;
+}
+.workflow-inset {
+  border-left: 2px solid #bbcdb8;
+  padding: 4px 0 4px 15px;
+}
+/* A title or position that is one line of text, wrapped: two lines tall, more as it needs. */
+.inline-action-form textarea.one-line-text {
+  min-height: 0;
+  field-sizing: content;
+}
+/* The fields of a stage that is set aside rather than removed take no part in the layout. */
+.workflow-stage-fields {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.bet-form > .workflow-stage-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+/* An inset that is a fieldset (it can be switched off with the stage it belongs to) has no box of its own. */
+fieldset.workflow-inset {
+  margin: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+.workflow-inset h4 {
+  margin: 0;
+  font-size: 13px;
+  color: #344c32;
+}
+.workflow-fieldset {
+  border: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+}
+.workflow-fieldset > legend {
+  font-size: 12px;
+  font-weight: 600;
+  color: #526047;
+  padding: 0;
+  margin-bottom: 9px;
+}
+/* A date's controls sit in a fieldset rather than a .field, so its error takes the field's gap. */
+.historical-date-field > .field-error {
+  margin-top: 7px;
+}
+.workflow-date-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.workflow-date-grid > label:only-child {
+  grid-column: 1 / -1;
+}
+.workflow-date-grid input,
+.workflow-date-time input {
+  max-width: 100%;
+  min-width: 0;
+}
+.bet-form .workflow-checkbox,
+.inline-action-form .workflow-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 11px;
+  min-height: 44px;
+  padding: 10px 0;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.65;
+  cursor: pointer;
+}
+.bet-form .workflow-checkbox > input,
+.inline-action-form .workflow-checkbox > input {
+  flex: 0 0 19px;
+  width: 19px;
+  height: 19px;
+  min-height: 19px;
+  margin: 2px 0 0;
+  padding: 0;
+  accent-color: #153b3e;
+}
+.bet-form .workflow-checkbox > span,
+.inline-action-form .workflow-checkbox > span {
+  display: block;
+  min-width: 0;
+}
+.workflow-acknowledgements {
+  border: 1px solid #dce6d7;
+  background: #f5f8f1;
+  border-radius: 7px;
+  padding: 14px 16px;
+}
+.workflow-acknowledgements > legend {
+  background: #f5f8f1;
+  padding: 0 6px;
+  color: #153b3e;
+  font-weight: 700;
+  /* What the boxes below commit you to is not the smallest text on the sheet. */
+  font-size: 13px;
+}
+/* What the history comes to, above the boxes that confirm it. */
+.workflow-acknowledgements > .history-summary {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--text, #153b3e);
+}
+.workflow-record {
+  padding: 21px 0;
+  border-bottom: 1px solid #e4e8e1;
+}
+.workflow-record h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 13px;
+}
+.workflow-facts {
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+.workflow-facts > div {
+  display: grid;
+  grid-template-columns: minmax(105px, 0.55fr) minmax(0, 1.45fr);
+  gap: 12px;
+}
+.workflow-facts dt {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.7;
+}
+.workflow-facts dd {
+  margin: 0;
+  color: #344c32;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.workflow-record p,
+.workflow-review > p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #526047;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.workflow-record > p {
+  margin-top: 12px;
+}
+.workflow-record .workflow-provenance {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+/* A requested correction says what happens next; it wears the warning tint, not an error's red. */
+.workflow-notice {
+  margin-top: 16px;
+  padding: 11px 13px;
+  border: 1px solid #ecd9ae;
+  border-left: 3px solid #b8892d;
+  border-radius: 6px;
+  background: #fbf3e2;
+}
+.workflow-notice p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #5f4205;
+  overflow-wrap: anywhere;
+}
+.workflow-notice p + p {
+  margin-top: 4px;
+}
+.workflow-notice .workflow-notice-quote {
+  white-space: pre-wrap;
+}
+.workflow-notice strong {
+  font-weight: 700;
+}
+/* The correction a revision answers opens the form, on the form's own rhythm. */
+.inline-action-form .workflow-notice {
+  margin-top: 0;
+}
+/* What a revision changed from the one before, under the record and in the paper trail. */
+div.workflow-changes {
+  margin-top: 12px;
+}
+div.workflow-changes > p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted-strong);
+  white-space: normal;
+}
+.workflow-changes > ul {
+  display: grid;
+  gap: 2px;
+  margin: 4px 0 0;
+  padding-left: 18px;
+  list-style: disc;
+}
+/* Plain list items, even inside a paper-trail entry's own list item. */
+.workflow-changes > ul > li {
+  display: list-item;
+  position: static;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #344c32;
+  overflow-wrap: anywhere;
+}
+.workflow-changes > ul > li::before {
+  content: none;
+}
+.workflow-record a {
+  color: #153b3e;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  overflow-wrap: anywhere;
+}
+.workflow-signatures {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+  border-top: 1px solid #e4e8e1;
+  padding-top: 14px;
+}
+.workflow-signatures > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  color: #344c32;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.workflow-signatures svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.workflow-signatures small {
+  display: block;
+  color: var(--muted-strong);
+  font-size: 12px;
+}
+.workflow-review {
+  margin-top: 20px;
+  border: 1px solid #dce6d7;
+  border-radius: 8px;
+  padding: 18px;
+  background: #f5f8f1;
+}
+.workflow-review > h3 {
+  margin-bottom: 10px;
+}
+/* The proposer line, facts, reason and notice are siblings; give each a beat of space. */
+.workflow-review > p + p,
+.workflow-review > p + dl,
+.workflow-review > dl + p {
+  margin-top: 12px;
+}
+.workflow-tools {
+  margin-top: 16px;
+  border-top: 1px solid #e4e8e1;
+  padding-top: 8px;
+}
+.workflow-tools summary,
+.workflow-prior summary {
+  cursor: pointer;
+  min-height: 44px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.7;
+  color: #526047;
+  padding: 11px 0;
+}
+.workflow-tools .action-buttons {
+  margin-top: 3px;
+}
+/* The ways out of a bet in play: always visible under the next step, never in the tools. */
+.next-action > :is(.call-off, .take-back) {
+  margin-top: 10px;
+  color: var(--red);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.next-action > :is(.call-off, .take-back):hover {
+  text-decoration-thickness: 2px;
+}
+/* "Someone changed this while you were reading/writing", with the way forward beside it. */
+.next-action .review-note,
+.next-action .stale-note {
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.next-action .review-note {
+  margin-bottom: 14px;
+}
+.next-action :is(.review-note, .stale-note) > p {
+  flex: 1 1 240px;
+  /* Outranks the compact phone rule for .next-action p. */
+  font-size: inherit;
+}
+.next-action :is(.review-note, .stale-note) > .button {
+  flex: 0 0 auto;
+}
+/* A change was refused because the record moved on. It sits outside the next step so a closed bet
+   can show it too, and it takes focus because the button that was pressed is usually gone. */
+.form-note.conflict-note {
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.form-note.conflict-note > p {
+  flex: 1 1 240px;
+  font-size: inherit;
+}
+:is(.conflict-note, .stale-note):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+.closure-block .closure-disputed {
+  font-size: 12px;
+  border-left: 2px solid #dce6d7;
+  padding-left: 10px;
+}
+.workflow-prior {
+  margin-top: 9px;
+  border-left: 2px solid #dce6d7;
+  padding-left: 12px;
+}
+.workflow-prior .workflow-facts > div {
+  display: block;
+}
+.workflow-prior p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.workflow-prior .workflow-facts dd {
+  font-size: 12px;
+}
+/* The prior version's agreement and its reported history are two lists; keep a beat between. */
+.workflow-prior .workflow-facts + .workflow-facts {
+  margin-top: 12px;
+}
+/* "Your move" at the top of the sheet jumps to the next step further down. */
+.your-move {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 11px 15px;
+  min-height: 44px;
+  border-radius: 8px;
+  background: #153b3e;
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+.your-move strong {
+  font-weight: 700;
+}
+.your-move:hover {
+  background: #1f4b4e;
+}
+.your-move:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+/* "Your move" scrolls this heading to the top, just below the sheet's pinned heading: the sheet's
+   scroll padding clears that heading and leaves room for the ring (styles.css, .modal-content). */
+.next-action h3:focus {
+  outline: none;
+}
+.next-action h3:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+.position-card .position-agreed {
+  display: inline-flex;
+  margin-left: auto;
+}
+/* A result or delivery still waiting on a confirmation is neutral, not the green of a done one,
+   and its dashed edge marks it as unsigned without relying on colour. */
+.result-block.result-pending {
+  background: #f3f5f1;
+  border-color: #dfe5da;
+  border-style: dashed;
+}
+.result-block.result-pending > svg {
+  color: var(--muted-strong);
+}
+.result-block .result-meta {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #526047;
+}
+.result-block .result-consequence {
+  font-size: 12px;
+  color: #526047;
+}
+.result-signatures {
+  display: grid;
+  gap: 4px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+.result-signatures > li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #344c32;
+}
+.result-signatures > li.waiting {
+  color: var(--muted-strong);
+}
+.result-signatures svg {
+  flex-shrink: 0;
+}
+/* Review status: one row that answers whether the bet can be reviewed yet. */
+.workflow-facts .review-status dd {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid #e1e6dc;
+  border-radius: 7px;
+  background: #f3f5f1;
+  color: #344c32;
+}
+.review-status dd > svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.review-status strong {
+  font-weight: 700;
+  margin-right: 3px;
+}
+.workflow-facts .review-status-ready dd {
+  color: #24502c;
+  background: #eef6ea;
+  border-color: #cfe3c6;
+}
+.workflow-facts .review-status-due dd {
+  color: #5f4205;
+  background: #fbf3e2;
+  border-color: #ecd9ae;
+}
+.workflow-facts .review-status-paused dd {
+  color: #3f4650;
+  background: #f1f2f4;
+  border-color: #dcdfe4;
+}
+.workflow-passed {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 7px;
+  border: 1px solid #ecd9ae;
+  border-radius: 999px;
+  background: #fbf3e2;
+  color: #5f4205;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+/* Evidence keeps its own line breaks; who added it sits on its own line below. */
+.workflow-facts .readiness-evidence {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.workflow-facts dd > .workflow-provenance {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted-strong);
+}
+/* Proposed changes: each agreed part beside its proposal, with what changes marked. */
+.workflow-compare {
+  margin: 14px 0 0;
+  display: grid;
+}
+.compare-row {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.6fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px 14px;
+  padding: 11px 0;
+  border-top: 1px solid #e1e8db;
+}
+.compare-row dt {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #526047;
+}
+.compare-field {
+  display: block;
+  font-weight: 700;
+  color: #344c32;
+}
+.compare-state {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 0 7px;
+  border: 1px solid #dfe5da;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.compare-changed .compare-state {
+  color: #5f4205;
+  background: #fbf3e2;
+  border-color: #ecd9ae;
+}
+.compare-added .compare-state {
+  color: #24502c;
+  background: #eef6ea;
+  border-color: #cfe3c6;
+}
+.compare-removed .compare-state {
+  color: #8a2f22;
+  background: #fbece8;
+  border-color: #efcfc6;
+}
+.compare-row dd {
+  margin: 0;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #344c32;
+  overflow-wrap: anywhere;
+}
+.compare-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted-strong);
+}
+.compare-value {
+  white-space: pre-wrap;
+}
+.compare-row .compare-same {
+  grid-column: 2 / -1;
+  color: #526047;
+  white-space: pre-wrap;
+}
+.workflow-prior .workflow-compare {
+  margin-top: 4px;
+}
+@media (min-width: 521px) {
+  .workflow-date-time {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+@media (max-width: 520px) {
+  .compare-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .compare-row .compare-same {
+    grid-column: auto;
+  }
+  /* Every footer shares the width the same way on a phone: side by side when both labels fit,
+     the primary on its own row when they do not, so the pinned footer stays short. */
+  .modal-footer .button {
+    flex: 1 1 auto;
+    justify-content: center;
+    white-space: normal;
+  }
+  .workflow-date-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 9px;
+  }
+  .workflow-review {
+    padding: 16px;
+  }
+  .workflow-facts > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .workflow-acknowledgements {
+    padding: 12px;
+  }
+  .workflow-review .button,
+  .workflow-tools .button {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
+    min-height: 44px;
+  }
+  .workflow-date-time input {
+    font-size: 16px;
+    width: 100%;
+  }
+  .bet-form .positions-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.timeline p a,
+.workflow-facts dd a,
+.result-block p a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.timeline .audit-attachment p {
+  margin-top: 4px;
+  padding-bottom: 6px;
+}

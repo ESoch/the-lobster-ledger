@@ -1,0 +1,470 @@
+/* CLI and AI-connection guides. They use the app's page-heading and panel anatomy; the rules
+   here only lay out the steps, the command blocks and the authorization card. */
+.cli-guide,
+.cli-authorization {
+  --cli-ink: #263b3c;
+  --cli-body: #34494a;
+  --cli-muted: var(--muted-strong);
+  --cli-border: var(--border, #e4e8e1);
+  --cli-error: #b5493b;
+  color: var(--cli-body);
+}
+html[data-theme='dark'] :is(.cli-guide, .cli-authorization) {
+  --cli-ink: #edf5f1;
+  --cli-body: #d2dedb;
+  --cli-muted: #9aaba6;
+  --cli-border: #2c3e40;
+  --cli-error: #ef8a78;
+}
+/* theme.css greys every dark <p> (html[data-theme='dark'] p). These rules out-rank it so the
+   guide keeps one hierarchy in both themes: body text and list items in the body ink, notes and
+   the aside muted, and errors in the error red. */
+html[data-theme] :is(.cli-panel-body, .cli-authorization-body) :is(p, li) {
+  color: var(--cli-body);
+}
+html[data-theme]
+  :is(.cli-panel-body, .cli-authorization-body)
+  :is(.cli-note, .cli-notice, .cli-empty, .cli-device-detail p),
+html[data-theme] .cli-guide-aside .cli-panel-body p {
+  color: var(--cli-muted);
+}
+html[data-theme] :is(.cli-panel-body, .cli-authorization-body) :is(.cli-error, .cli-error p) {
+  color: var(--cli-error);
+}
+.cli-guide {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  min-width: 0;
+}
+.cli-guide-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.42fr);
+  gap: 20px;
+  align-items: start;
+}
+.cli-steps,
+.cli-guide-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* Panels: a section-title row, then a padded body with even vertical rhythm. */
+.cli-panel {
+  min-width: 0;
+}
+.cli-panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+/* The app's phone rule caps a subtitle at 240px for headings that share a row with buttons. A guide's
+   heading has none, so its intro runs the width of the column. */
+.cli-guide .page-heading p {
+  max-width: none;
+}
+/* Headings use the heading ink, not the guide's body ink, like the h1 and h2 on every other page. */
+.cli-guide .page-heading h1,
+.cli-panel-heading h2 {
+  color: var(--cli-ink);
+}
+.cli-panel-icon {
+  flex: 0 0 auto;
+  color: var(--cli-muted);
+}
+.cli-step-number {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--cli-border);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cli-ink);
+}
+.cli-panel-body {
+  padding: 0 22px 22px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.cli-panel-body > * {
+  margin: 0;
+}
+.cli-panel-body > * + * {
+  margin-top: 12px;
+}
+.cli-panel-body > .cli-command-wrap + * {
+  margin-top: 4px;
+}
+.cli-panel-body > .cli-command-wrap + .cli-command-wrap {
+  margin-top: 6px;
+}
+/* A closing command's reserved status line already spaces it from the panel edge. */
+.cli-panel-body > .cli-command-wrap:last-child {
+  margin-bottom: -8px;
+}
+/* The reference card is a list of commands; keep consecutive blocks close together. */
+.cli-reference .cli-panel-body > .cli-command-wrap + .cli-command-wrap {
+  margin-top: 2px;
+}
+.cli-note {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.cli-guide-aside .cli-panel-body {
+  font-size: 13px;
+}
+.cli-guide a:not(.button) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* A link that sits alone in its paragraph (the vendor's own guide) is a tap target in its own right,
+   unlike a link inside a sentence. */
+.cli-guide a.cli-standalone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+}
+
+/* Command blocks */
+.cli-command {
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid var(--cli-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, currentColor 4%, transparent);
+}
+.cli-command pre {
+  flex: 1;
+  min-width: 0;
+  /* Commands wrap only between words or at the joints CommandText marks; the block scrolls
+     sideways as a last resort instead of splitting a flag or a host name. */
+  white-space: pre-wrap;
+  overflow-wrap: normal;
+  word-break: normal;
+  overflow-x: auto;
+  padding: 13px 14px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--cli-ink);
+}
+.cli-token,
+.cli-token-part {
+  white-space: nowrap;
+}
+.cli-token-long {
+  white-space: inherit;
+}
+.cli-command code,
+.cli-guide p code,
+.cli-guide li code,
+.cli-authorization code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+.cli-guide p code,
+.cli-guide li code,
+.cli-authorization p code {
+  font-size: max(12px, 0.93em);
+  color: var(--cli-ink);
+}
+.cli-command button {
+  flex: 0 0 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  min-height: 46px;
+  padding: 10px;
+  background: transparent;
+  color: var(--cli-muted);
+  cursor: pointer;
+}
+.cli-command button:hover {
+  color: var(--cli-ink);
+}
+.cli-command button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -4px;
+  border-radius: 8px;
+}
+/* The status line keeps its height while empty, so "Copied" never moves the text below. */
+.cli-copy-status {
+  display: block;
+  min-height: 20px;
+  padding-top: 2px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--cli-muted);
+}
+.cli-copy-status.is-error {
+  color: var(--cli-error);
+}
+
+/* Connected devices */
+.cli-devices {
+  margin-top: 16px;
+}
+.cli-device-list:empty {
+  display: none;
+}
+.cli-device {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--cli-border);
+}
+.cli-device:first-child {
+  border-top: 1px solid var(--cli-border);
+}
+.cli-device > svg {
+  flex: 0 0 auto;
+  color: var(--cli-muted);
+}
+.cli-device-detail {
+  flex: 1;
+  min-width: 0;
+}
+.cli-device-detail h3 {
+  font-size: 14px;
+  margin: 0 0 4px;
+  overflow-wrap: anywhere;
+  color: var(--cli-ink);
+}
+.cli-device-detail p {
+  font-size: 12px;
+  margin: 0;
+}
+/* A failed revoke is reported on its own row, under the device it concerns. */
+.cli-device-detail .cli-error {
+  margin-top: 6px;
+}
+.cli-revoke-confirm p {
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+.cli-error > p + .button {
+  margin-top: 8px;
+}
+
+/* Authorization card */
+.cli-authorization {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  border: 1px solid var(--cli-border);
+  border-radius: 16px;
+  padding: clamp(20px, 4vw, 32px);
+  margin-bottom: 32px;
+  background: color-mix(in srgb, currentColor 3%, transparent);
+  font-size: 14px;
+  line-height: 1.65;
+}
+.cli-section-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: color-mix(in srgb, currentColor 7%, transparent);
+}
+/* An invalid or expired request reads as a failure: error-tinted card, warning icon, red message. */
+.cli-authorization.is-problem {
+  border-color: color-mix(in srgb, var(--cli-error) 45%, var(--cli-border));
+  background: color-mix(in srgb, var(--cli-error) 6%, transparent);
+}
+.cli-authorization.is-problem .cli-section-icon {
+  color: var(--cli-error);
+  background: color-mix(in srgb, var(--cli-error) 14%, transparent);
+}
+.cli-authorization .cli-command-wrap {
+  margin: 0 0 6px;
+}
+.cli-authorization h2 {
+  width: fit-content;
+  max-width: 100%;
+  font-size: 18px;
+  line-height: 1.35;
+  margin: 0 0 12px;
+  color: var(--cli-ink);
+}
+/* The card's title takes focus from script when it appears. Like the page headings
+   (styles.css h1[tabindex='-1']), it is not a control, so it shows no focus ring. */
+.cli-authorization h2[tabindex='-1']:focus {
+  outline: none;
+}
+.cli-authorization-body {
+  flex: 1;
+  min-width: 0;
+}
+.cli-authorization p {
+  margin: 0 0 14px;
+}
+.cli-authorization strong {
+  overflow-wrap: anywhere;
+}
+.cli-permissions {
+  padding-left: 20px;
+  margin: 0 0 14px;
+}
+.cli-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.cli-error {
+  color: var(--cli-error);
+}
+:is(.cli-guide, .cli-authorization) .cli-error code {
+  color: inherit;
+}
+.cli-notice {
+  font-size: 13px;
+}
+/* Why a demo card has no Allow button, and the one check that matters before allowing. */
+.cli-demo-notice {
+  padding: 12px 14px;
+  border: 1px solid var(--cli-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, currentColor 4%, transparent);
+}
+html[data-theme] .cli-authorization-body .cli-check {
+  color: var(--cli-ink);
+}
+/* A sign-in button that cannot work here is switched off for good, not busy. */
+button.cli-unavailable:disabled {
+  cursor: not-allowed;
+}
+
+/* Signed-out page frame */
+/* 1224px less the 64px gutters is the guide's own 1160px, so header, notice and guide share edges. */
+.cli-public {
+  max-width: 1224px;
+  margin: 0 auto;
+  padding: 28px 32px 70px;
+}
+.cli-public-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 38px;
+}
+/* The same wordmark as the welcome page: serif, mark in the accent colour. */
+.cli-public-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--green);
+  text-decoration: none;
+  font: 25px var(--serif);
+}
+.cli-public-brand svg {
+  color: var(--red);
+}
+.cli-public-brand strong {
+  font-weight: 400;
+}
+.cli-public-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: inherit;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+/* The two guide links sit side by side where there is room and stack where there is not; the gap
+   keeps them from touching either way. */
+.welcome-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 28px;
+  margin-top: 22px;
+}
+.welcome-cli-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Two columns need room for both: the steps for their text and the aside for its commands. Below
+   this the aside drops under the steps and lays its cards out in a row where they fit. */
+@media (max-width: 1100px) {
+  .cli-guide-layout {
+    grid-template-columns: 1fr;
+  }
+  /* Two cards a row where they fit, one where they do not. An odd last card takes the whole row,
+     so the grid never leaves an empty cell or squeezes a long command. */
+  .cli-guide-aside {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  }
+  .cli-guide-aside > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 600px) {
+  .cli-public {
+    padding: 20px 16px 44px;
+  }
+  .cli-public-header {
+    padding-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  .cli-public-brand {
+    font-size: 22px;
+  }
+  .cli-guide .section-title {
+    padding: 16px 16px 12px;
+  }
+  .cli-panel-body {
+    padding: 0 16px 16px;
+  }
+  .cli-step-number {
+    width: 24px;
+    height: 24px;
+  }
+  .cli-authorization {
+    display: block;
+  }
+  .cli-section-icon {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 14px;
+  }
+  .cli-device {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .cli-device-detail {
+    flex-basis: calc(100% - 40px);
+  }
+  .cli-device > button,
+  .cli-revoke-confirm {
+    margin-left: 32px;
+  }
+  .cli-command pre {
+    padding: 12px 10px 12px 12px;
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,164 @@
+/*
+ * Notifications. The region is portaled to <body>, so it sits above the dialog overlay (z-index 1000)
+ * and outside the app root that an open dialog hides. Radix also turns pointer events off on <body>
+ * while a dialog is open, so the region ignores the pointer and only the toast itself takes it back.
+ * Toasts keep their own dark surface in both themes.
+ */
+.toast-region {
+  --toast-bg: #214646;
+  --toast-border: #365956;
+  --toast-text: #f4f7ed;
+  --toast-icon: #b6cea5;
+  --toast-close: #c3d2bd;
+  --toast-error-bg: #3d2724;
+  --toast-error-border: #ef8a78;
+  --toast-error-icon: #ffb4a6;
+  position: fixed;
+  z-index: 2000;
+  bottom: 16px;
+  /* Clear of the 232px sidebar, so the toast never covers navigation or the row it refers to. */
+  left: 248px;
+  width: min(420px, calc(100vw - 280px));
+  pointer-events: none;
+}
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 6px 10px 14px;
+  background: var(--toast-bg);
+  color: var(--toast-text);
+  /* The dismiss button sits on a dark card in both themes, so it keeps the lighter gold ring. */
+  --focus-ring: #c58b42;
+  border: 1px solid var(--toast-border);
+  border-radius: 8px;
+  box-shadow: 0 6px 30px #0a1e1e66;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.toast > svg {
+  flex-shrink: 0;
+  color: var(--toast-icon);
+}
+.toast-text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.toast button {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin: -7px 0;
+  color: var(--toast-close);
+  border-radius: 8px;
+}
+.toast[data-tone='error'] {
+  background: var(--toast-error-bg);
+  border-color: var(--toast-error-border);
+}
+.toast[data-tone='error'] > svg {
+  color: var(--toast-error-icon);
+}
+
+/* With a bet sheet open (590px wide, on the right), stay in the space between sidebar and sheet. */
+@media (min-width: 1154px) {
+  body:has(.detail-sheet) .toast-region {
+    width: min(420px, calc(100vw - 854px));
+  }
+}
+/* Too narrow for that gap: sit at the foot of the sheet, which leaves room under its last entry. */
+@media (min-width: 761px) and (max-width: 1153px) {
+  body:has(.detail-sheet) .toast-region {
+    left: auto;
+    right: 16px;
+    width: min(558px, calc(100vw - 32px));
+  }
+}
+@media (max-width: 1153px) {
+  /* The toast lies over the foot of the sheet, so the last entry needs room for it: the toast's own
+     height (Toast.tsx publishes it, and it grows as the copy wraps in a narrow window), its 12-16px
+     offset from the window's foot and some air. A short toast and no toast keep the 96px. With the
+     sheet scrolled to its end the room goes when the toast does, so it eases away rather than
+     dropping the content in one step (the reduced-motion rule in styles.css stops the easing). */
+  .detail-sheet > .bet-detail {
+    padding-bottom: max(96px, calc(var(--toast-height, 0px) + 40px + env(safe-area-inset-bottom)));
+    transition: padding-bottom 0.2s ease;
+  }
+}
+/* A dialog (not the sheet) pins Cancel and its primary button to its foot and has Close top right,
+   so a toast lying over it would cover one of them or its heading. Up to 1153px wide there is no
+   room beside it, so the toast keeps to the foot of the window and the dialog makes room: it moves
+   up and shrinks by the toast's height (Toast.tsx publishes it, and it grows as the copy wraps in a
+   narrow window), its form scrolling inside, and takes the room back when the toast goes. The toast
+   then covers nothing, and Tab through the dialog holds it, as it does beside a wide one; in a window so short that the dialog is left under 240px (Toast.tsx), it does not, and runs out.
+   --toast-room is what the toast takes from the foot of the window: its height, its offset from the
+   foot and 12px of air above it. The dialog then fills the rest, less its own margin at the top
+   (half of what styles.css leaves around it: 28px, 15px, 11px). */
+:root:has(.toast-region .toast) {
+  --toast-room: calc(var(--toast-height, 0px) + 16px + 12px);
+}
+@media (max-width: 760px) {
+  :root:has(.toast-region .toast) {
+    --toast-room: calc(var(--toast-height, 0px) + 12px + env(safe-area-inset-bottom) + 12px);
+  }
+}
+@media (max-width: 1153px) {
+  /* Eased, so a dialog being typed in glides rather than jumps when the toast comes or goes (the
+     reduced-motion rule in styles.css stops the easing). */
+  .modal-content:not(.detail-sheet) {
+    transition:
+      top 0.2s ease,
+      max-height 0.2s ease;
+  }
+  :root:has(.toast-region .toast) .modal-content:not(.detail-sheet) {
+    top: calc((100dvh - var(--toast-room) + 28px) / 2);
+    max-height: calc(100dvh - var(--toast-room) - 28px);
+  }
+}
+@media (min-width: 761px) and (max-width: 1153px) {
+  /* Centred under the dialog, which is centred in the window. */
+  body:has(.modal-content:not(.detail-sheet)) .toast-region {
+    left: 50%;
+    right: auto;
+    width: min(420px, calc(100vw - 32px));
+    transform: translateX(-50%);
+  }
+}
+@media (max-width: 760px) {
+  .toast-region {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+  :root:has(.toast-region .toast) .modal-content:not(.detail-sheet) {
+    top: calc((100dvh - var(--toast-room) + 15px) / 2);
+    max-height: calc(100dvh - var(--toast-room) - 15px);
+  }
+}
+@media (max-width: 520px) {
+  :root:has(.toast-region .toast) .modal-content:not(.detail-sheet) {
+    top: calc((100dvh - var(--toast-room) + 11px) / 2);
+    max-height: calc(100dvh - var(--toast-room) - 11px);
+  }
+}
+/* From 1154px a wide window has room left of the dialog (630px at the widest, centred): the toast
+   sits in it, at the top left, so it never lies over the dialog and Tab through the dialog holds it. */
+@media (min-width: 1154px) {
+  body:has(.modal-content:not(.detail-sheet)) .toast-region {
+    top: 12px;
+    bottom: auto;
+    left: 16px;
+    right: auto;
+    width: min(420px, calc((100vw - 630px) / 2 - 32px));
+  }
+}
+@media (forced-colors: active) {
+  .toast {
+    border-color: CanvasText;
+  }
+}

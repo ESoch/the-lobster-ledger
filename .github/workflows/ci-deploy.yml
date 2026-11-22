@@ -1,0 +1,184 @@
+name: Check and deploy
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CI: 'true'
+  WRANGLER_SEND_METRICS: 'false'
+  WRANGLER_LOG: info
+  WRANGLER_LOG_SANITIZE: 'true'
+  WRANGLER_WRITE_LOGS: 'false'
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run tests
+        run: pnpm test
+      - name: Test market-feed importer
+        run: |
+          python3 -m venv "$RUNNER_TEMP/lobster-market-feed"
+          "$RUNNER_TEMP/lobster-market-feed/bin/pip" install -r scripts/requirements-market.txt
+          "$RUNNER_TEMP/lobster-market-feed/bin/python" -m unittest discover -s scripts -p 'test_lobster_market_*.py'
+      - name: Typecheck and build
+        run: pnpm build
+      - name: Verify CLI installation
+        run: pnpm test:cli-install
+      - name: Check Worker packaging
+        run: pnpm exec wrangler deploy --dry-run
+
+  deploy:
+    name: Deploy production
+    needs: check
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      vars.ENABLE_PRODUCTION_DEPLOY == 'true' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: ${{ steps.configuration.outputs.app_url }}
+    concurrency:
+      group: lobster-ledger-production
+      cancel-in-progress: false
+    steps:
+      - name: Check out tested source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build tested source
+        env:
+          APP_ORIGIN: ${{ vars.APP_ORIGIN }}
+        run: pnpm build
+      - name: Check whether this commit is still current
+        id: current
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          current_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')
+          if [[ "$current_sha" == "$GITHUB_SHA" ]]; then
+            echo 'deploy=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'deploy=false' >> "$GITHUB_OUTPUT"
+            echo 'Deployment skipped: main has a newer commit.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Prepare deployment configuration
+        id: configuration
+        if: steps.current.outputs.deploy == 'true'
+        env:
+          APP_ORIGIN: ${{ vars.APP_ORIGIN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          D1_DATABASE_ID: ${{ vars.D1_DATABASE_ID }}
+          D1_DATABASE_NAME: ${{ vars.D1_DATABASE_NAME }}
+          GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+          OWNER_EMAIL: ${{ secrets.OWNER_EMAIL }}
+          RATE_LIMIT_NAMESPACE_ID: ${{ vars.RATE_LIMIT_NAMESPACE_ID }}
+          WORKER_NAME: ${{ vars.WORKER_NAME }}
+        run: |
+          node scripts/production-config.mjs
+          pnpm exec wrangler deploy --dry-run --config wrangler.production.json
+          echo "app_url=$APP_ORIGIN" >> "$GITHUB_OUTPUT"
+      - name: Deploy Worker and static assets
+        if: steps.current.outputs.deploy == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [[ -z "$CLOUDFLARE_API_TOKEN" || -z "$CLOUDFLARE_ACCOUNT_ID" ]]; then
+            echo '::error::Configure the production Cloudflare token and account ID before deploying.'
+            exit 1
+          fi
+          pnpm exec wrangler d1 migrations apply DB --remote --config wrangler.production.json
+          pnpm exec wrangler deploy --message "GitHub commit $GITHUB_SHA" --config wrangler.production.json
+      - name: Verify live application
+        if: steps.current.outputs.deploy == 'true'
+        env:
+          APP_URL: ${{ steps.configuration.outputs.app_url }}
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { readFileSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { setTimeout } from 'node:timers/promises';
+
+          const builtHtml = readFileSync('dist/index.html', 'utf8');
+          const entryAsset = builtHtml.match(/<script[^>]+src="([^"]+)"/)?.[1];
+          assert.ok(entryAsset?.startsWith('/assets/'), 'Built JavaScript entry must exist');
+          const request = (path) => fetch(new URL(path, process.env.APP_URL), {
+            redirect: 'error',
+            signal: AbortSignal.timeout(15_000),
+            headers: { 'Cache-Control': 'no-cache' },
+          });
+
+          for (let attempt = 1; attempt <= 5; attempt++) {
+            try {
+              const page = await request('/');
+              assert.equal(page.status, 200, 'Public page must load');
+              assert.match(page.headers.get('content-type') ?? '', /text\/html/);
+              const html = await page.text();
+              assert.ok(html.includes('The Lobster Ledger'), 'Application title must match');
+              assert.ok(html.includes(entryAsset), 'Live page must reference this build');
+              const asset = await request(entryAsset);
+              assert.equal(asset.status, 200, 'Built JavaScript must be available');
+              assert.match(asset.headers.get('content-type') ?? '', /javascript/);
+              await asset.body?.cancel();
+              const config = await request('/api/config');
+              assert.equal(config.status, 200, 'Configuration must be available');
+              assert.equal((await config.json()).configured, true, 'Sign-in must be configured');
+              const release = await request('/downloads/cli.json');
+              assert.equal(release.status, 200, 'CLI release metadata must be available');
+              const releaseInfo = await release.json();
+              const expectedRelease = JSON.parse(readFileSync('dist/downloads/cli.json', 'utf8'));
+              assert.deepEqual(releaseInfo, expectedRelease, 'CLI release must match this build');
+              const archive = await request(`/downloads/${expectedRelease.filename}`);
+              assert.equal(archive.status, 200, 'CLI archive must be downloadable');
+              assert.equal(createHash('sha256').update(Buffer.from(await archive.arrayBuffer())).digest('hex'), expectedRelease.sha256, 'CLI archive checksum must match');
+              const ledger = await request('/api/ledger');
+              assert.equal(ledger.status, 401, 'Anonymous access to the ledger must be rejected');
+              await ledger.body?.cancel();
+              const market = await request('/api/lobster-market');
+              assert.equal(market.status, 401, 'Market API must require workspace authentication');
+              await market.body?.cancel();
+              console.log('Live checks passed: current build, sign-in configuration, private ledger.');
+              break;
+            } catch (error) {
+              if (attempt === 5) throw error;
+              console.log(`Live check attempt ${attempt} did not pass; retrying in 10 seconds.`);
+              await setTimeout(10_000);
+            }
+          }
+          NODE

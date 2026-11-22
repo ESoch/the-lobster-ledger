@@ -1,0 +1,98 @@
+/* The avatar menu in the topbar. Colours come from the theme variables, so both themes need no overrides. */
+.account-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.account-menu-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 60;
+  width: 264px;
+  max-width: calc(100vw - 16px);
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text, #263b3c);
+  box-shadow:
+    0 16px 48px #153b3e20,
+    0 3px 10px #153b3e0a;
+}
+
+.account-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 10px 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+
+.account-menu-header > span:last-child {
+  min-width: 0;
+}
+
+.account-menu-header strong {
+  display: block;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-menu-header small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.account-menu-list {
+  display: grid;
+}
+
+.account-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: inherit;
+}
+
+.account-menu-item svg {
+  color: var(--muted);
+}
+
+.account-menu-item:hover,
+.account-menu-item:focus-visible {
+  background: var(--surface-hover, #edf1eb);
+}
+
+.account-menu-item:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.account-menu-separated {
+  margin-top: 7px;
+  position: relative;
+}
+
+.account-menu-separated::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 6px;
+  right: 6px;
+  height: 1px;
+  background: var(--border);
+}

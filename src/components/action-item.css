@@ -1,0 +1,106 @@
+/* One next move, shared by Over to you (compact card) and the Activity inbox (expanded row). */
+.action-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  color: inherit;
+  text-align: left;
+}
+.action-item-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+.action-item-title {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #27393b;
+}
+.action-item-meta {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.action-item-verb {
+  font-weight: 700;
+  color: var(--green);
+}
+.action-item-age {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.action-item-chevron {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+.action-item .avatar {
+  flex: 0 0 auto;
+}
+.action-item .status-badge {
+  max-width: 100%;
+}
+
+.action-item-compact {
+  align-items: flex-start;
+  padding: 12px 12px 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.action-item-compact .action-item-chevron {
+  align-self: center;
+}
+.action-item-compact:hover {
+  border-color: #cbd7c2;
+  background: var(--surface-hover, #edf3e6);
+}
+
+/* Full-bleed rows: hairline dividers run edge to edge and the focus ring is drawn inward. */
+.action-item-expanded {
+  padding: 18px 22px;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+}
+.action-item-expanded .action-item-title {
+  font-size: 14px;
+}
+.action-item-expanded:hover {
+  background: var(--surface-hover, #edf3e6);
+}
+.action-item-expanded:focus-visible {
+  outline-offset: -3px;
+}
+.action-list > li:first-child > .action-item-expanded {
+  border-top: 0;
+}
+
+html[data-theme='dark'] .action-item-title {
+  color: var(--text);
+}
+html[data-theme='dark'] .action-item-compact:hover {
+  border-color: #415453;
+}
+
+@media (max-width: 760px) {
+  .action-item-expanded {
+    padding: 16px;
+  }
+}

@@ -1,0 +1,139 @@
+/* The Log a visit dialog, and the trace a correction leaves in a restaurant's price history. */
+
+/* A visit remembered to the month: the month and its year side by side, each its own field. */
+.price-entry-month {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 9px;
+}
+
+/* A restaurant already on the record under the name being typed, with a way to use it. */
+.price-entry-match:empty {
+  display: none;
+}
+.price-entry-match {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: -6px;
+}
+.price-entry-match > p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px 12px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted-strong);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* The dialog's questions (an unusual price, a visit already reported) are decisions with a safe
+   default, not failures, so they take the app's gold notice tint rather than the error red. They
+   keep role="alert" so a screen reader still announces them. The tokens switch with the theme. */
+.price-entry-notice {
+  padding: 11px 13px;
+  border: 1px solid var(--status-gold-border, #e6d6b0);
+  border-radius: 5px;
+  color: var(--text, #27393b);
+  background: var(--status-gold-bg, #f8f2e6);
+  font-size: 13px;
+  line-height: 1.7;
+}
+/* A question to read, not skim past: the notice's ink, not the muted paragraph ink the dark theme
+   gives every p (that rule is more specific than the notice alone). */
+.price-entry-form .price-entry-notice > p {
+  color: inherit;
+}
+
+/* The same visit is already reported at another price: correct that one, or keep both. It sits
+   just above the footer, in the form, so the pinned footer stays the height of its buttons. */
+.price-entry-duplicate > p {
+  margin: 0;
+}
+.price-entry-duplicate > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 9px;
+}
+/* On a phone its two answers share the width as the footer's buttons do. */
+@media (max-width: 520px) {
+  .price-entry-duplicate .button {
+    flex: 1 1 auto;
+    justify-content: center;
+    white-space: normal;
+  }
+}
+
+/* A report that replaced an earlier one says so, and the earlier ones stay one click away. */
+.price-corrected-tag {
+  display: inline-block;
+  margin-left: 3px;
+  padding: 1px 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted-strong);
+  font-size: 12px;
+  font-weight: 700;
+  vertical-align: middle;
+}
+.price-earlier {
+  margin: 0 22px 18px;
+  color: var(--muted-strong);
+  font-size: 13px;
+}
+/* A list item keeps the disclosure triangle; the padding makes it a 44px target. */
+.price-earlier > summary {
+  padding: 11px 0;
+  line-height: 22px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.price-earlier ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.price-earlier li {
+  overflow-wrap: anywhere;
+  padding: 9px 0;
+  border-top: 1px solid var(--border);
+  line-height: 1.6;
+}
+
+/* A price unusual enough to ask about: the likely meant price is one tap, keeping it the other. */
+.price-entry-unusual > p {
+  margin: 0;
+}
+.price-entry-unusual > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 9px;
+}
+@media (max-width: 520px) {
+  .price-entry-unusual .button {
+    flex: 1 1 auto;
+    justify-content: center;
+    white-space: normal;
+  }
+}
+
+/* Withdraw sits beside Correct on the member's own reports, as quiet as it is. */
+.price-withdraw-button {
+  min-height: 44px;
+  padding: 0 4px;
+  color: var(--muted-strong);
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* A report entered through an AI connection says so, without competing with the price. */
+.price-entry-source {
+  font-style: italic;
+}

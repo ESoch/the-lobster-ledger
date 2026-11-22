@@ -1,0 +1,1220 @@
+/* Keep the compact ledger layout legible at normal browser zoom. */
+:root {
+  --muted: var(--muted-strong);
+}
+
+.button,
+.heading-actions .button,
+.members-intro .button,
+.action-buttons .button,
+.share-actions .button,
+.bet-form > .modal-footer .button {
+  min-height: 44px;
+  font-size: 12px;
+}
+
+.icon-button,
+.modal-heading > .icon-button {
+  width: 44px;
+  height: 44px;
+}
+
+.text-button,
+.section-title .text-button,
+.house-rule button,
+.approval-footer,
+.filter-tabs button,
+.panel-tabs button {
+  min-height: 44px;
+  font-size: 12px;
+}
+
+.workspace-switch strong {
+  font-size: 12px;
+  white-space: normal;
+  line-height: 1.5;
+}
+.workspace-switch small,
+.sidebar-profile small {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.5;
+}
+.nav-label {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.nav-item {
+  font-size: 13px;
+  color: #566750;
+}
+.nav-item small {
+  font-size: 12px;
+}
+.house-rule > span,
+.house-rule button,
+.sidebar-profile strong,
+.invite-sidebar {
+  font-size: 12px;
+}
+.house-rule p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted-strong);
+}
+.house-rule button {
+  padding-right: 8px;
+}
+.invite-sidebar {
+  color: var(--muted-strong);
+}
+.sidebar-profile {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.breadcrumb,
+.breadcrumb strong {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.global-search {
+  color: var(--muted-strong);
+}
+.global-search input {
+  font-size: 12px;
+  min-height: 44px;
+}
+.global-search input::placeholder {
+  color: var(--muted-strong);
+}
+.profile-button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+}
+
+/* The sidebar (and the phone drawer) is one column the height of the window: brand, workspace card,
+   ten links and a pinned footer. Spacing is tight by default so the links usually fit; on a shorter
+   window the footer's paragraph, then the workspace details, give way before the links start to
+   scroll. Every control keeps its 44px height. */
+.sidebar {
+  padding-top: 24px;
+}
+.sidebar .workspace-switch {
+  margin: 18px 0 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.nav-label {
+  padding-bottom: 6px;
+}
+.nav-item {
+  margin-bottom: 2px;
+}
+.nav-divider {
+  margin: 8px 11px;
+}
+.sidebar-bottom {
+  padding-top: 6px;
+}
+.house-rule {
+  padding: 12px 13px 0;
+}
+.house-rule p {
+  margin: 6px 0 0;
+  line-height: 1.55;
+}
+.invite-sidebar {
+  min-height: 44px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.sidebar-profile {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+@media (max-height: 960px) {
+  .house-rule p {
+    display: none;
+  }
+}
+@media (max-height: 880px) {
+  .nav-label,
+  .workspace-switch small {
+    display: none;
+  }
+  .sidebar .workspace-switch {
+    margin: 14px 0 8px;
+  }
+  .nav-divider {
+    margin: 4px 11px;
+  }
+}
+@media (max-height: 820px) {
+  .sidebar {
+    padding-top: 16px;
+  }
+  .sidebar .workspace-switch {
+    margin: 10px 0 4px;
+  }
+  .nav-item {
+    margin-bottom: 1px;
+  }
+  .house-rule {
+    padding-top: 8px;
+  }
+  .sidebar-profile {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+}
+
+.demo-bar {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.demo-bar strong,
+.demo-bar select {
+  font-size: 12px;
+  color: #526047;
+}
+.demo-bar strong {
+  white-space: nowrap;
+}
+.demo-bar select {
+  min-height: 36px;
+}
+.date-eyebrow {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.page-heading p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted-strong);
+}
+
+.stat-label,
+.stat-card:not(.balance-feature) .stat-label,
+.stat-card:last-child .stat-label {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.stat-card p,
+.stat-card:last-child p {
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: normal;
+  color: var(--muted-strong);
+}
+.stat-value > span {
+  font-size: 13px;
+  color: var(--muted-strong);
+}
+.stat-period {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.balance-feature > div {
+  max-width: calc(100% - 66px);
+}
+.balance-feature .stat-label {
+  width: auto;
+  justify-content: flex-start;
+  font-size: 12px;
+  color: #d1e0d4;
+}
+.balance-feature .stat-value {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+.balance-feature .stat-value span {
+  color: #c1d6c7;
+}
+.balance-feature p {
+  font-size: 12px;
+  color: #d0dfd0;
+}
+.balance-feature button {
+  position: static;
+  min-height: 44px;
+  padding: 0;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #edf4e8;
+}
+.balance-illustration {
+  width: 132px;
+  right: -13px;
+  bottom: 32px;
+  pointer-events: none;
+}
+
+.section-title h2 {
+  font-size: 15px;
+}
+.section-title p,
+.panel-subtitle {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.7;
+}
+.section-title .text-button {
+  font-size: 12px;
+}
+.panel-tabs button {
+  color: var(--muted-strong);
+  padding-top: 6px;
+  padding-bottom: 12px;
+}
+.panel-tabs > span {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.bet-table-head {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.bet-title-cell > strong,
+.compact-table .bet-title-cell > strong {
+  font-size: 12px;
+  line-height: 1.65;
+}
+.bet-title-cell > small,
+.compact-table .bet-title-cell > small {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.7;
+  flex-wrap: wrap;
+}
+.bet-title-cell > small > span,
+.compact-table .bet-title-cell > small > span {
+  font-size: 12px;
+}
+.bet-people > span:last-child {
+  font-size: 12px;
+  color: #56694c;
+}
+.bet-people small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.stake-cell {
+  font-size: 13px;
+  color: #526047;
+}
+.status-badge,
+.compact-table .status-badge,
+.detail-meta .status-badge {
+  max-width: 100%;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 4px 6px;
+  gap: 4px;
+}
+.status-badge svg,
+.compact-table .status-badge svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+.status-active {
+  color: #4b693e;
+}
+.status-pending {
+  color: #836022;
+}
+.status-confirming,
+.status-history {
+  color: #2f566d;
+}
+.status-owed,
+.status-settling {
+  color: #954d35;
+}
+.status-settled {
+  color: #3d5a43;
+}
+.status-voided,
+.status-declined.status-withdrawn {
+  color: var(--muted-strong);
+}
+.status-declined {
+  color: #8f4434;
+}
+/* The status track fits the short compact labels on one line; "with Sarah" sits in the meta line. */
+.compact-table .bet-table-head,
+.compact-table .bet-row {
+  grid-template-columns: minmax(0, 1fr) 59px 104px 40px 8px;
+  gap: 10px;
+}
+/* The names stay in the accessibility tree where the column is too narrow to show them. */
+.compact-table .bet-people > span:last-child {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+@media (max-width: 1000px) {
+  .bet-people > span:last-child {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+.approval-count {
+  font-size: 12px;
+  color: #806629;
+}
+.approval-footer {
+  font-size: 12px;
+  color: #526c43;
+}
+.mini-leader strong {
+  font-size: 13px;
+}
+/* Inline, not the flex row of styles.css: at 12px "0 wins · No decided bets" can outgrow a 320px card, and a
+   flex row would split "0 wins" across two lines. */
+.mini-leader > div > span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.mini-leader > div > span > i {
+  margin-inline: 4px;
+  vertical-align: middle;
+}
+.mini-leader strong small,
+.leaderboard-member small,
+.member-card h3 small {
+  font-size: 12px;
+  color: #526c43;
+}
+.rank {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.rank-1 {
+  color: #957427;
+}
+.rank-2 {
+  color: #5c7c78;
+}
+.rank-3 {
+  color: #946b4b;
+}
+.leader-score small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.leaderboard-foot,
+.map-preview-foot {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted-strong);
+}
+.workspace-footer {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.8;
+}
+
+.filter-tabs button {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.filter-tabs button span {
+  font-size: 12px;
+}
+.search-field {
+  min-height: 44px;
+}
+.search-field input {
+  font-size: 13px;
+}
+.search-field input::placeholder {
+  color: var(--muted-strong);
+}
+.checkbox-label {
+  min-height: 44px;
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.table-footer {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.7;
+}
+.empty-state p {
+  font-size: 13px;
+  color: var(--muted-strong);
+}
+.balance-summary > div > span {
+  font-size: 12px;
+  color: #5f7053;
+}
+.balance-summary small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.person-balance > div strong {
+  font-size: 13px;
+}
+.person-balance > div span,
+.person-balance small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.balance-disclaimer {
+  color: var(--muted-strong);
+}
+.balance-disclaimer p {
+  font-size: 12px;
+}
+.group-balance > span {
+  font-size: 12px;
+}
+.leaderboard-banner p {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.7;
+}
+.sort-control {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.sort-control select {
+  min-height: 44px;
+  font-size: 12px;
+  color: #526c43;
+}
+.leaderboard-table-head {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.leaderboard-member strong {
+  font-size: 12px;
+}
+.win-rate-cell {
+  font-size: 12px;
+}
+.leader-note {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text, #27393b);
+}
+.leaderboard-waiting,
+.leaderboard-waiting small,
+:is(.leaderboard-row, .mini-leader) .rank-medal {
+  font-size: 12px;
+}
+.place-item strong {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.place-item small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.place-bet-count {
+  font-size: 12px;
+  color: #526c43;
+}
+.place-help {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.members-intro p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted-strong);
+}
+.member-card h3 {
+  font-size: 13px;
+}
+.member-role {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.member-stats span {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.5;
+}
+.members-footnote {
+  font-size: 12px;
+}
+.invite-member-card .invite-hint {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.7;
+}
+.invite-label {
+  font-size: 12px;
+  color: #526c43;
+}
+.inbox-activity p {
+  font-size: 12px;
+  color: #526047;
+}
+.inbox-activity strong {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.inbox-activity small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+
+/* Agreement language and its audit trail should be easy to read before signing. */
+.modal-description {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--muted-strong);
+}
+.bet-form label,
+.inline-action-form label,
+.invite-result label {
+  font-size: 12px;
+  color: #526047;
+}
+.bet-form input,
+.bet-form textarea,
+.bet-form select,
+.positions-form input,
+.inline-action-form select,
+.inline-action-form textarea,
+.invite-result input {
+  min-height: 44px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #344c32;
+}
+.bet-form input::placeholder,
+.bet-form textarea::placeholder,
+.inline-action-form textarea::placeholder {
+  color: var(--muted-strong);
+}
+.positions-form .versus {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.input-affix > span {
+  font-size: 13px;
+  color: var(--muted-strong);
+}
+.optional {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.form-note,
+.house-rules-list .form-note {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.75;
+}
+.form-error {
+  font-size: 13px;
+}
+.hint,
+.field-error {
+  font-size: 12px;
+}
+.hint {
+  color: var(--muted-strong);
+}
+.detail-sheet > .modal-heading h2 {
+  font-size: 14px;
+}
+.record-id {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.detail-facts {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.lifecycle-step small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.detail-section-label,
+.terms-block h3 {
+  font-size: 13px;
+}
+.position-card strong {
+  font-size: 12px;
+}
+.position-card p {
+  font-size: 13px;
+  color: var(--muted-strong);
+  line-height: 1.75;
+}
+.terms-block p {
+  font-size: 14px;
+  color: #56694c;
+  line-height: 1.8;
+}
+.detail-location {
+  color: var(--muted-strong);
+}
+.detail-location strong {
+  font-size: 13px;
+  color: #526c43;
+}
+.detail-location small {
+  font-size: 12px;
+}
+.result-block h3 {
+  font-size: 13px;
+  color: #526c43;
+}
+.result-block h3 > span {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.result-block p {
+  font-size: 13px;
+  color: var(--muted-strong);
+  line-height: 1.75;
+}
+.result-block small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.next-action h3 {
+  font-size: 14px;
+}
+.next-action > p,
+.next-action > form + p {
+  font-size: 13px;
+  color: var(--muted-strong);
+  line-height: 1.75;
+}
+/* Errors keep the error colour: the body-text rule above matches the same paragraph. */
+.next-action > p.form-error {
+  color: #a34f34;
+}
+.timeline-heading h3 {
+  font-size: 13px;
+}
+.timeline-heading > span {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.timeline p {
+  font-size: 12px;
+  color: #56694c;
+}
+.timeline small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.audit-note {
+  font-size: 12px;
+  color: var(--muted-strong);
+  line-height: 1.7;
+}
+.invite-result > p {
+  font-size: 13px;
+  color: var(--muted-strong);
+}
+.export-options strong {
+  font-size: 13px;
+}
+.export-options small {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+.house-rules-list h3 {
+  font-size: 13px;
+}
+.house-rules-list p {
+  font-size: 13px;
+  color: var(--muted-strong);
+}
+.connection-notice {
+  font-size: 13px;
+  color: #7c6028;
+}
+.welcome-screen main > p {
+  font-size: 14px;
+  color: var(--muted-strong);
+}
+.welcome-pending-bet {
+  font-size: 14px;
+}
+.welcome-trust {
+  font-size: 12px;
+  color: var(--muted-strong);
+}
+
+@media (min-width: 1001px) and (max-width: 1200px) {
+  .compact-table .bet-table-head,
+  .compact-table .bet-row {
+    grid-template-columns: minmax(0, 1fr) 52px 104px 40px;
+    gap: 8px;
+  }
+}
+
+/* In the two-column stats grid the hero card is about 285px wide, and its 12px caption would run under the
+   roll on the right. The caption wraps before the illustration instead. */
+@media (min-width: 761px) and (max-width: 940px) {
+  .balance-feature p {
+    max-width: calc(100% - 37px);
+  }
+}
+
+@media (max-width: 760px) {
+  .page-heading p {
+    font-size: 12px;
+  }
+  .heading-actions .button {
+    font-size: 12px;
+    min-height: 44px;
+  }
+  .demo-bar {
+    font-size: 12px;
+  }
+  .demo-bar strong,
+  .demo-bar select,
+  .demo-explainer {
+    font-size: 12px;
+  }
+  .demo-bar label {
+    font-size: 0;
+  }
+  .compact-table .bet-table-head,
+  .compact-table .bet-row {
+    grid-template-columns: minmax(0, 1fr) 52px 104px 36px 6px;
+    gap: 8px;
+  }
+  .balance-feature > div {
+    max-width: calc(100% - 45px);
+  }
+  .balance-illustration {
+    width: 100px;
+    right: -20px;
+    bottom: 44px;
+  }
+  .balance-summary {
+    gap: 26px;
+  }
+  .workspace-footer {
+    font-size: 12px;
+  }
+  .modal-description {
+    font-size: 13px;
+  }
+  .modal-heading > .icon-button {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 360px) {
+  /* The name column is under 100px here: give the name the avatar's space instead of splitting it. */
+  .leaderboard-member .avatar {
+    display: none;
+  }
+}
+
+/* The Ledger's controls give back space around themselves on a phone, so the first bet is in view on a
+   short screen (at 320x640 it sat below the fold in the demo build). Nothing that is a target shrinks:
+   the chips, search field, select and checkbox keep their 44px. While nothing is filtered the count
+   line is folded away, since "All bets 16" says it; the text stays in the live region for screen
+   readers, so "3 of 16 bets" is still announced once a filter narrows the list. */
+@media (max-width: 520px) {
+  .ledger-page .filter-tabs {
+    padding-top: 10px;
+    padding-bottom: 6px;
+  }
+  .ledger-page .ledger-search-row {
+    padding-bottom: 8px;
+    row-gap: 8px;
+  }
+  /* A header of two words, not a target. */
+  .ledger-page .bet-table-head {
+    padding-block: 8px;
+  }
+  .ledger-page .ledger-result-summary[data-unfiltered] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 520px) {
+  .page-heading h1 {
+    font-size: 26px;
+  }
+  .page-heading {
+    flex-wrap: wrap;
+  }
+  .page-heading > div:first-child {
+    flex: 1 1 190px;
+  }
+  .page-heading p {
+    max-width: 240px;
+    font-size: 12px;
+  }
+  .date-eyebrow {
+    font-size: 12px;
+  }
+  .heading-actions .export-button {
+    width: 44px;
+    min-height: 44px;
+    font-size: 0;
+  }
+  .heading-actions .export-button svg {
+    width: 18px;
+    height: 18px;
+  }
+  /* "Viewing as" stays visible on a phone, so the member picker drops to its own row if it must. */
+  .demo-bar {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+  .demo-bar > span {
+    flex-wrap: wrap;
+    gap: 2px 6px;
+  }
+  .demo-explainer {
+    font-size: 12px;
+    max-width: 185px;
+  }
+  .demo-bar strong,
+  .demo-bar select {
+    font-size: 12px;
+  }
+  .balance-feature {
+    min-height: 204px;
+  }
+  .balance-feature > div {
+    max-width: calc(100% - 105px);
+  }
+  .balance-feature .stat-label {
+    width: auto;
+    font-size: 12px;
+  }
+  .balance-feature .stat-value {
+    margin-top: 16px;
+  }
+  .balance-feature p {
+    font-size: 12px;
+  }
+  .balance-feature button {
+    position: static;
+    min-height: 44px;
+    margin-top: 8px;
+    padding: 0;
+    font-size: 12px;
+  }
+  .balance-illustration {
+    width: 150px;
+    right: -7px;
+    bottom: 38px;
+  }
+  .stat-card:not(.balance-feature) .stat-label,
+  .stat-card:last-child .stat-label {
+    font-size: 12px;
+  }
+  .stat-card p,
+  .stat-card:last-child p {
+    font-size: 12px;
+  }
+  .stat-card:last-child .stat-period {
+    margin-left: 7px;
+    font-size: 12px;
+  }
+  .approval-count {
+    font-size: 12px;
+    margin-top: 8px;
+    margin-left: 17px;
+  }
+  .approval-footer {
+    min-height: 44px;
+    font-size: 12px;
+  }
+  .section-title {
+    gap: 10px;
+  }
+  .section-title h2 {
+    font-size: 14px;
+  }
+  .section-title p,
+  .place-list .section-title p {
+    font-size: 12px;
+  }
+  .section-title .text-button {
+    font-size: 12px;
+  }
+  .panel-tabs button {
+    font-size: 12px;
+  }
+  .panel-tabs > span {
+    font-size: 12px;
+  }
+  .compact-table .bet-table-head,
+  .compact-table .bet-row,
+  .bet-table-head,
+  .bet-row {
+    grid-template-columns: minmax(0, 1fr) minmax(24px, auto);
+    gap: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  /* A phone row stacks: title and rolls on top, the status chip on its own line below. */
+  .bet-table-head {
+    font-size: 12px;
+    grid-template-areas: 'wager stake';
+  }
+  /* The chip sits on its own line, so the column header is clipped, not removed. */
+  .bet-table-head > th:nth-child(3) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  .bet-table-head > th:nth-child(4) {
+    justify-self: end;
+    text-align: right;
+  }
+  .bet-row,
+  .compact-table .bet-row {
+    grid-template-areas: 'wager stake' 'status status';
+    min-height: 0;
+  }
+  .bet-row > .wager-cell {
+    grid-area: wager;
+  }
+  .bet-row > td:nth-child(3) {
+    grid-area: status;
+    justify-self: start;
+    text-align: left;
+  }
+  .bet-row > .stake-cell {
+    grid-area: stake;
+    align-self: start;
+    justify-content: flex-end;
+  }
+  .bet-table-head > th:nth-child(4):after {
+    font-size: 12px;
+  }
+  .bet-title-cell > strong,
+  .compact-table .bet-title-cell > strong {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .bet-title-cell > small,
+  .compact-table .bet-title-cell > small,
+  .bet-title-cell > small > span,
+  .compact-table .bet-title-cell > small > span {
+    font-size: 12px;
+  }
+  .status-badge,
+  .compact-table .status-badge,
+  .detail-meta .status-badge {
+    font-size: 12px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.45;
+    padding: 4px 5px;
+    letter-spacing: 0;
+  }
+  .bet-row .status-badge {
+    white-space: nowrap;
+  }
+  .status-badge svg,
+  .compact-table .status-badge svg {
+    width: 12px;
+    height: 12px;
+  }
+  .stake-cell {
+    font-size: 13px;
+  }
+  .mini-leader strong {
+    font-size: 12px;
+  }
+  .mini-leader > div > span,
+  .leaderboard-foot,
+  .map-preview-foot {
+    font-size: 12px;
+  }
+  .workspace-footer > span:first-child {
+    max-width: 190px;
+  }
+  .table-footer {
+    font-size: 12px;
+  }
+  .balance-summary {
+    gap: 18px;
+  }
+  .balance-summary > div {
+    flex: 1;
+    min-width: 0;
+  }
+  .balance-summary > div > span {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .balance-summary small {
+    font-size: 12px;
+  }
+  .person-balance > div strong {
+    font-size: 13px;
+  }
+  .balance-disclaimer p {
+    font-size: 12px;
+  }
+  .group-balance > span {
+    font-size: 12px;
+    min-width: 0;
+    flex: 1 1 0;
+  }
+  .leaderboard-banner p {
+    font-size: 12px;
+  }
+  .leaderboard-table-head,
+  .leaderboard-row {
+    grid-template-columns: 32px minmax(0, 1fr) 44px 42px 47px;
+    gap: 7px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .leaderboard-table-head {
+    font-size: 12px;
+  }
+  .leaderboard-member strong {
+    font-size: 12px;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  .leaderboard-member small {
+    font-size: 12px;
+  }
+  .leaderboard-row,
+  .win-rate-cell {
+    font-size: 12px;
+  }
+  .sort-control {
+    font-size: 12px;
+  }
+  .sort-control select {
+    font-size: 12px;
+    min-height: 44px;
+  }
+  .leader-note {
+    font-size: 13px;
+  }
+  .place-item strong {
+    font-size: 13px;
+  }
+  .place-item small {
+    font-size: 12px;
+  }
+  .place-help {
+    font-size: 12px;
+  }
+  .member-card h3 {
+    font-size: 12px;
+  }
+  .member-card h3 small {
+    font-size: 12px;
+  }
+  .member-role {
+    font-size: 12px;
+  }
+  .member-stats span {
+    font-size: 12px;
+  }
+  .invite-member-card .invite-hint {
+    font-size: 12px;
+  }
+  .invite-label {
+    font-size: 12px;
+  }
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bet-form label,
+  .inline-action-form label {
+    font-size: 12px;
+  }
+  .bet-form input,
+  .bet-form select,
+  .bet-form textarea,
+  .positions-form input,
+  .inline-action-form textarea,
+  .inline-action-form select,
+  .invite-result input {
+    font-size: 16px;
+  }
+  .form-note,
+  .house-rules-list .form-note {
+    font-size: 12px;
+  }
+  .detail-facts {
+    font-size: 12px;
+  }
+  .position-card strong {
+    font-size: 12px;
+  }
+  .position-card p {
+    font-size: 13px;
+  }
+  .terms-block p {
+    font-size: 14px;
+  }
+  .next-action h3 {
+    font-size: 14px;
+  }
+  .next-action > p,
+  .next-action > form + p {
+    font-size: 13px;
+  }
+  .timeline-heading h3 {
+    font-size: 13px;
+  }
+  .timeline p {
+    font-size: 12px;
+  }
+  .timeline small {
+    font-size: 12px;
+  }
+  .result-block h3 {
+    font-size: 13px;
+  }
+  .result-block p {
+    font-size: 13px;
+  }
+  .result-block small {
+    font-size: 12px;
+  }
+  .export-options strong {
+    font-size: 13px;
+  }
+  .export-options small {
+    font-size: 12px;
+  }
+  .house-rules-list p {
+    font-size: 13px;
+  }
+}

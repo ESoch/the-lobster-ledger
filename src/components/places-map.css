@@ -1,0 +1,516 @@
+.places-map {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 480px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #e7eeea;
+}
+
+.places-map--compact {
+  height: 100%;
+  min-height: 200px;
+}
+.places-map-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  background: #e7eeea;
+  font-family: inherit;
+}
+/* The canvas outline would paint beneath the Leaflet panes, so the ring is drawn on a layer above them. */
+.places-map::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1001;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.places-map:has(.places-map-canvas:focus-visible)::after {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: -3px;
+}
+.places-map-canvas:focus-visible {
+  outline: 2px solid transparent;
+}
+.places-map--static .leaflet-container {
+  cursor: default;
+}
+.places-map .leaflet-tile-pane {
+  filter: saturate(0.55);
+}
+.places-map .leaflet-control-attribution {
+  padding: 2px 6px;
+  font-size: 12px;
+  background: rgb(255 255 255 / 92%);
+}
+.places-map .leaflet-control-attribution a {
+  color: #153b3e;
+}
+.places-map .leaflet-control-zoom {
+  border: 1px solid #d7ded8;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(21 59 62 / 8%);
+  overflow: hidden;
+}
+.places-map .leaflet-control-zoom a {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  color: #153b3e;
+  background: #fff;
+}
+.places-map .leaflet-control-zoom a:hover {
+  background: #f1f5f0;
+}
+.places-map .leaflet-control-zoom a:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: -3px;
+}
+/* A 44px hit area around a 32px pin. */
+.places-map-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+}
+.places-map-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  color: #fff;
+  background: #153b3e;
+  box-shadow: 0 2px 9px rgb(21 59 62 / 22%);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+.places-map-pin.is-selected {
+  background: #bd4938;
+  transform: scale(1.12);
+}
+/* A group of pins that would overlap: an outlined pill with a second one peeking out. Its pin
+   glyph says the number counts places, not bets. */
+.places-map-pin.is-cluster {
+  gap: 1px;
+  width: auto;
+  min-width: 32px;
+  padding: 0 7px 0 5px;
+  border-radius: 16px;
+  border-color: #153b3e;
+  color: #153b3e;
+  background: #fff;
+  box-shadow:
+    4px -4px 0 -1px #fff,
+    4px -4px 0 1px #153b3e,
+    0 2px 9px rgb(21 59 62 / 22%);
+}
+.places-map-pin.is-cluster.is-selected {
+  border-color: #bd4938;
+  color: #bd4938;
+  background: #fff;
+  box-shadow:
+    4px -4px 0 -1px #fff,
+    4px -4px 0 1px #bd4938,
+    0 2px 9px rgb(21 59 62 / 22%);
+}
+.places-map-pin-glyph {
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+}
+.places-map-pin-dot {
+  width: 7px;
+  height: 7px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+.places-map-marker:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 0;
+}
+/* Saved places while pinning: reference only, so they read as quieter than the new pin. */
+.places-map--picking .places-map-pin {
+  width: 22px;
+  height: 22px;
+  border-width: 2px;
+  background: #5e7471;
+  box-shadow: none;
+  opacity: 0.75;
+}
+.places-map--picking .places-map-pin.is-cluster {
+  width: auto;
+  min-width: 22px;
+  padding: 0 5px 0 3px;
+  border-radius: 11px;
+  border-color: #5e7471;
+  color: #3f5250;
+  background: #fff;
+  font-size: 12px;
+}
+.places-map--picking .places-map-pin-glyph {
+  width: 10px;
+  height: 10px;
+}
+.places-map-picked-pin {
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #bd4938;
+  box-shadow: 0 2px 6px rgb(21 59 62 / 35%);
+}
+.places-map-reticle {
+  position: absolute;
+  z-index: 450;
+  top: 50%;
+  left: 50%;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border: 2px solid rgb(21 59 62 / 75%);
+  border-radius: 50%;
+  filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+  pointer-events: none;
+}
+.places-map-reticle::before,
+.places-map-reticle::after {
+  content: '';
+  position: absolute;
+  background: rgb(21 59 62 / 75%);
+}
+.places-map-reticle::before {
+  top: -9px;
+  bottom: -9px;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+}
+.places-map-reticle::after {
+  top: 50%;
+  left: -9px;
+  right: -9px;
+  height: 2px;
+  margin-top: -1px;
+}
+.places-map .leaflet-popup-content-wrapper {
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgb(21 59 62 / 14%);
+}
+.places-map .leaflet-popup-content {
+  margin: 16px 28px 16px 16px;
+  font: inherit;
+}
+.places-map .leaflet-popup-close-button {
+  width: 28px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 26px;
+}
+.places-map-popup {
+  display: grid;
+  gap: 6px;
+  color: #153b3e;
+  line-height: 1.5;
+  font-size: 12px;
+}
+.places-map-popup:focus {
+  outline: none;
+}
+.places-map-popup:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.places-map-popup strong {
+  font-size: 14px;
+}
+.places-map .places-map-popup p {
+  margin: 0;
+  color: #657774;
+}
+.places-map-popup > span {
+  margin-top: 3px;
+  font-size: 12px;
+}
+.places-map-popup a {
+  color: #153b3e;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.places-map-popup ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.places-map-popup li button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 1px solid rgb(127 140 138 / 45%);
+  border-radius: 6px;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+.places-map-popup li button:hover {
+  background: rgb(127 140 138 / 15%);
+}
+.places-map-popup li small {
+  flex-shrink: 0;
+  font-weight: 500;
+  opacity: 0.8;
+}
+.places-map-external {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 7px 10px;
+  border: 1px solid #dbe2dc;
+  border-radius: 6px;
+  color: #153b3e;
+  background: rgb(255 255 255 / 96%);
+  font-size: 12px;
+  font-weight: 650;
+  text-decoration: none;
+}
+.places-map-external:hover {
+  background: #f7f8f5;
+}
+.places-map-external:focus-visible,
+.places-map-pick button:focus-visible,
+.places-map-notice button:focus-visible,
+.places-map-empty button:focus-visible,
+.places-map-popup li button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+/* The full map's credits sit in a strip under the canvas, not over it, so no pin is ever half
+   beneath them. The map becomes two rows: the canvas, and the strip as tall as it needs to be. */
+.places-map--framed {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+.places-map--framed .places-map-canvas {
+  height: auto;
+  min-height: 0;
+}
+/* What is drawn over the canvas stays over the canvas, not over the strip. */
+.places-map--framed::after,
+.places-map--framed > :is(.places-map-empty, .places-map-notice, .places-map-touch-hint) {
+  grid-area: 1 / 1;
+}
+.places-map-credit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px 12px;
+  padding: 6px 8px;
+  border-top: 1px solid #dbe2dc;
+  background: #fff;
+  font-size: 12px;
+}
+.places-map-credit .places-map-external {
+  /* The ring is drawn inside the padding, which the map's rounded edge would clip beyond. */
+  outline-offset: 1px;
+}
+.places-map-attribution {
+  margin-left: auto;
+  text-align: right;
+}
+/* Leaflet's own control, moved here: no longer a floating corner label. */
+.places-map .places-map-credit .leaflet-control-attribution {
+  position: static;
+  float: none;
+  clear: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #3d4b45;
+  background: none;
+  box-shadow: none;
+}
+/* Out of the corner and in a row of its own, each credit link is a target in its own right. */
+.places-map .places-map-credit .leaflet-control-attribution a {
+  display: inline-block;
+  min-height: 24px;
+  line-height: 24px;
+}
+.places-map-notice {
+  position: absolute;
+  z-index: 800;
+  top: 12px;
+  left: 12px;
+  right: 58px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 10px;
+  padding: 8px 10px 8px 12px;
+  border-radius: 6px;
+  background: #fff;
+  color: #713f24;
+  font-size: 12px;
+}
+.places-map-notice button {
+  min-height: 28px;
+  padding: 4px 10px;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.places-map-empty {
+  position: absolute;
+  z-index: 700;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  max-width: calc(100% - 40px);
+  padding: 17px 20px;
+  border: 1px solid #dfe5df;
+  border-radius: 10px;
+  color: #153b3e;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 4px 20px rgb(21 59 62 / 6%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.places-map-empty > svg {
+  flex-shrink: 0;
+}
+.places-map-empty strong {
+  font-weight: 550;
+  color: #667672;
+}
+.places-map-empty button {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--surface, #fff);
+  background: var(--green, #153b3e);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.places-map-touch-hint {
+  position: absolute;
+  z-index: 900;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  color: #fff;
+  background: rgb(16 27 29 / 55%);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  pointer-events: none;
+}
+.places-map--picking .leaflet-container {
+  cursor: crosshair;
+}
+.places-map-picker {
+  display: grid;
+  gap: 8px;
+}
+.places-map-pick {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #e0e6df;
+  border-radius: 8px;
+  color: #52635f;
+  background: #f7f8f5;
+  font-size: 12px;
+}
+.places-map-pick p {
+  margin: 0;
+  line-height: 1.5;
+}
+.places-map-pick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+.places-map-pick button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #fff;
+  background: #153b3e;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+.places-map-pick button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.places-map-picker .places-map-pick button.places-map-clear {
+  border-color: var(--border, #c9d3cc);
+  color: var(--green, #153b3e);
+  background: transparent;
+}
+.places-map-pick-note {
+  font-weight: 650;
+}
+
+@media (max-width: 640px) {
+  .places-map {
+    height: 340px;
+  }
+  .places-map--compact {
+    height: 100%;
+    min-height: 200px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .places-map-pin {
+    transition: none;
+  }
+}

@@ -1,0 +1,557 @@
+{
+  "schemaVersion": 1,
+  "seriesId": "maine-dmr-american-lobster",
+  "sourceName": "Maine Department of Marine Resources",
+  "sourceUrl": "https://www.maine.gov/dmr/sites/maine.gov.dmr/files/inline-files/lobster_table.pdf",
+  "sourcePageUrl": "https://www.maine.gov/dmr/fisheries/commercial/landings-program/historical-data",
+  "sourceUpdatedOn": "2026-02-06",
+  "checkedAt": "2026-10-15T17:56:57.203705Z",
+  "species": "American lobster",
+  "region": "Maine, United States",
+  "currency": "USD",
+  "unit": "lb",
+  "priceBasis": "ex_vessel",
+  "frequency": "annual",
+  "refreshCadence": "weekly",
+  "notes": [
+    "Annual average price paid to harvesters for whole American lobster landed in Maine.",
+    "Nominal US dollars per live-weight pound; not adjusted for inflation.",
+    "Reporting changes in 2002–2004 affect comparisons across those years.",
+    "Preliminary years may be revised by Maine DMR."
+  ],
+  "observations": [
+    {
+      "year": 1950,
+      "priceCentsPerLb": 35,
+      "pounds": 18352600,
+      "landedValueUsd": 6412311,
+      "preliminary": false
+    },
+    {
+      "year": 1951,
+      "priceCentsPerLb": 35,
+      "pounds": 20759500,
+      "landedValueUsd": 7214107,
+      "preliminary": false
+    },
+    {
+      "year": 1952,
+      "priceCentsPerLb": 42,
+      "pounds": 20036300,
+      "landedValueUsd": 8511821,
+      "preliminary": false
+    },
+    {
+      "year": 1953,
+      "priceCentsPerLb": 38,
+      "pounds": 22300300,
+      "landedValueUsd": 8411229,
+      "preliminary": false
+    },
+    {
+      "year": 1954,
+      "priceCentsPerLb": 37,
+      "pounds": 21667700,
+      "landedValueUsd": 8087156,
+      "preliminary": false
+    },
+    {
+      "year": 1955,
+      "priceCentsPerLb": 38,
+      "pounds": 22718100,
+      "landedValueUsd": 8716012,
+      "preliminary": false
+    },
+    {
+      "year": 1956,
+      "priceCentsPerLb": 44,
+      "pounds": 20572300,
+      "landedValueUsd": 9119807,
+      "preliminary": false
+    },
+    {
+      "year": 1957,
+      "priceCentsPerLb": 37,
+      "pounds": 24402800,
+      "landedValueUsd": 8954234,
+      "preliminary": false
+    },
+    {
+      "year": 1958,
+      "priceCentsPerLb": 49,
+      "pounds": 21312000,
+      "landedValueUsd": 10445004,
+      "preliminary": false
+    },
+    {
+      "year": 1959,
+      "priceCentsPerLb": 50,
+      "pounds": 22328800,
+      "landedValueUsd": 11252686,
+      "preliminary": false
+    },
+    {
+      "year": 1960,
+      "priceCentsPerLb": 46,
+      "pounds": 24014200,
+      "landedValueUsd": 10967018,
+      "preliminary": false
+    },
+    {
+      "year": 1961,
+      "priceCentsPerLb": 53,
+      "pounds": 20917900,
+      "landedValueUsd": 11119803,
+      "preliminary": false
+    },
+    {
+      "year": 1962,
+      "priceCentsPerLb": 51,
+      "pounds": 22075300,
+      "landedValueUsd": 11195609,
+      "preliminary": false
+    },
+    {
+      "year": 1963,
+      "priceCentsPerLb": 55,
+      "pounds": 22804300,
+      "landedValueUsd": 12635826,
+      "preliminary": false
+    },
+    {
+      "year": 1964,
+      "priceCentsPerLb": 66,
+      "pounds": 20920697,
+      "landedValueUsd": 13878286,
+      "preliminary": false
+    },
+    {
+      "year": 1965,
+      "priceCentsPerLb": 75,
+      "pounds": 18861785,
+      "landedValueUsd": 14177204,
+      "preliminary": false
+    },
+    {
+      "year": 1966,
+      "priceCentsPerLb": 75,
+      "pounds": 19915816,
+      "landedValueUsd": 14904498,
+      "preliminary": false
+    },
+    {
+      "year": 1967,
+      "priceCentsPerLb": 82,
+      "pounds": 16489196,
+      "landedValueUsd": 13597869,
+      "preliminary": false
+    },
+    {
+      "year": 1968,
+      "priceCentsPerLb": 73,
+      "pounds": 20501732,
+      "landedValueUsd": 14931671,
+      "preliminary": false
+    },
+    {
+      "year": 1969,
+      "priceCentsPerLb": 81,
+      "pounds": 19834780,
+      "landedValueUsd": 16046829,
+      "preliminary": false
+    },
+    {
+      "year": 1970,
+      "priceCentsPerLb": 95,
+      "pounds": 18172269,
+      "landedValueUsd": 17201501,
+      "preliminary": false
+    },
+    {
+      "year": 1971,
+      "priceCentsPerLb": 100,
+      "pounds": 17558351,
+      "landedValueUsd": 17481291,
+      "preliminary": false
+    },
+    {
+      "year": 1972,
+      "priceCentsPerLb": 114,
+      "pounds": 16256467,
+      "landedValueUsd": 18587455,
+      "preliminary": false
+    },
+    {
+      "year": 1973,
+      "priceCentsPerLb": 137,
+      "pounds": 17044194,
+      "landedValueUsd": 23269859,
+      "preliminary": false
+    },
+    {
+      "year": 1974,
+      "priceCentsPerLb": 141,
+      "pounds": 16457666,
+      "landedValueUsd": 23212808,
+      "preliminary": false
+    },
+    {
+      "year": 1975,
+      "priceCentsPerLb": 161,
+      "pounds": 16515588,
+      "landedValueUsd": 26520134,
+      "preliminary": false
+    },
+    {
+      "year": 1976,
+      "priceCentsPerLb": 154,
+      "pounds": 19001053,
+      "landedValueUsd": 29238371,
+      "preliminary": false
+    },
+    {
+      "year": 1977,
+      "priceCentsPerLb": 174,
+      "pounds": 18487138,
+      "landedValueUsd": 32101423,
+      "preliminary": false
+    },
+    {
+      "year": 1978,
+      "priceCentsPerLb": 177,
+      "pounds": 19130459,
+      "landedValueUsd": 33878376,
+      "preliminary": false
+    },
+    {
+      "year": 1979,
+      "priceCentsPerLb": 180,
+      "pounds": 22133235,
+      "landedValueUsd": 39900632,
+      "preliminary": false
+    },
+    {
+      "year": 1980,
+      "priceCentsPerLb": 190,
+      "pounds": 21986894,
+      "landedValueUsd": 41729114,
+      "preliminary": false
+    },
+    {
+      "year": 1981,
+      "priceCentsPerLb": 209,
+      "pounds": 22631614,
+      "landedValueUsd": 47236923,
+      "preliminary": false
+    },
+    {
+      "year": 1982,
+      "priceCentsPerLb": 221,
+      "pounds": 22730253,
+      "landedValueUsd": 50343596,
+      "preliminary": false
+    },
+    {
+      "year": 1983,
+      "priceCentsPerLb": 233,
+      "pounds": 21976555,
+      "landedValueUsd": 51234291,
+      "preliminary": false
+    },
+    {
+      "year": 1984,
+      "priceCentsPerLb": 252,
+      "pounds": 19545682,
+      "landedValueUsd": 49298135,
+      "preliminary": false
+    },
+    {
+      "year": 1985,
+      "priceCentsPerLb": 224,
+      "pounds": 20125177,
+      "landedValueUsd": 45035558,
+      "preliminary": false
+    },
+    {
+      "year": 1986,
+      "priceCentsPerLb": 234,
+      "pounds": 19704317,
+      "landedValueUsd": 46171224,
+      "preliminary": false
+    },
+    {
+      "year": 1987,
+      "priceCentsPerLb": 276,
+      "pounds": 19747766,
+      "landedValueUsd": 54548137,
+      "preliminary": false
+    },
+    {
+      "year": 1988,
+      "priceCentsPerLb": 279,
+      "pounds": 21739067,
+      "landedValueUsd": 60742438,
+      "preliminary": false
+    },
+    {
+      "year": 1989,
+      "priceCentsPerLb": 255,
+      "pounds": 23368719,
+      "landedValueUsd": 59552211,
+      "preliminary": false
+    },
+    {
+      "year": 1990,
+      "priceCentsPerLb": 220,
+      "pounds": 28068238,
+      "landedValueUsd": 61627973,
+      "preliminary": false
+    },
+    {
+      "year": 1991,
+      "priceCentsPerLb": 235,
+      "pounds": 30788646,
+      "landedValueUsd": 72265347,
+      "preliminary": false
+    },
+    {
+      "year": 1992,
+      "priceCentsPerLb": 268,
+      "pounds": 26830448,
+      "landedValueUsd": 71822699,
+      "preliminary": false
+    },
+    {
+      "year": 1993,
+      "priceCentsPerLb": 247,
+      "pounds": 29926464,
+      "landedValueUsd": 73863438,
+      "preliminary": false
+    },
+    {
+      "year": 1994,
+      "priceCentsPerLb": 259,
+      "pounds": 38948867,
+      "landedValueUsd": 100936678,
+      "preliminary": false
+    },
+    {
+      "year": 1995,
+      "priceCentsPerLb": 274,
+      "pounds": 37208324,
+      "landedValueUsd": 101893173,
+      "preliminary": false
+    },
+    {
+      "year": 1996,
+      "priceCentsPerLb": 296,
+      "pounds": 36083443,
+      "landedValueUsd": 106980557,
+      "preliminary": false
+    },
+    {
+      "year": 1997,
+      "priceCentsPerLb": 294,
+      "pounds": 47023271,
+      "landedValueUsd": 138292438,
+      "preliminary": false
+    },
+    {
+      "year": 1998,
+      "priceCentsPerLb": 292,
+      "pounds": 47036836,
+      "landedValueUsd": 137189341,
+      "preliminary": false
+    },
+    {
+      "year": 1999,
+      "priceCentsPerLb": 345,
+      "pounds": 53494418,
+      "landedValueUsd": 184614071,
+      "preliminary": false
+    },
+    {
+      "year": 2000,
+      "priceCentsPerLb": 328,
+      "pounds": 57215406,
+      "landedValueUsd": 187714817,
+      "preliminary": false
+    },
+    {
+      "year": 2001,
+      "priceCentsPerLb": 317,
+      "pounds": 48617693,
+      "landedValueUsd": 153982266,
+      "preliminary": false
+    },
+    {
+      "year": 2002,
+      "priceCentsPerLb": 332,
+      "pounds": 63625745,
+      "landedValueUsd": 210950030,
+      "preliminary": false
+    },
+    {
+      "year": 2003,
+      "priceCentsPerLb": 374,
+      "pounds": 54970948,
+      "landedValueUsd": 205715329,
+      "preliminary": false
+    },
+    {
+      "year": 2004,
+      "priceCentsPerLb": 404,
+      "pounds": 71574244,
+      "landedValueUsd": 289078847,
+      "preliminary": false
+    },
+    {
+      "year": 2005,
+      "priceCentsPerLb": 463,
+      "pounds": 68729861,
+      "landedValueUsd": 317948336,
+      "preliminary": false
+    },
+    {
+      "year": 2006,
+      "priceCentsPerLb": 405,
+      "pounds": 75345827,
+      "landedValueUsd": 305439420,
+      "preliminary": false
+    },
+    {
+      "year": 2007,
+      "priceCentsPerLb": 439,
+      "pounds": 63975958,
+      "landedValueUsd": 280648419,
+      "preliminary": false
+    },
+    {
+      "year": 2008,
+      "priceCentsPerLb": 351,
+      "pounds": 69908504,
+      "landedValueUsd": 245150026,
+      "preliminary": false
+    },
+    {
+      "year": 2009,
+      "priceCentsPerLb": 293,
+      "pounds": 81174638,
+      "landedValueUsd": 237536890,
+      "preliminary": false
+    },
+    {
+      "year": 2010,
+      "priceCentsPerLb": 331,
+      "pounds": 96208772,
+      "landedValueUsd": 318052441,
+      "preliminary": false
+    },
+    {
+      "year": 2011,
+      "priceCentsPerLb": 319,
+      "pounds": 104924728,
+      "landedValueUsd": 334539734,
+      "preliminary": false
+    },
+    {
+      "year": 2012,
+      "priceCentsPerLb": 269,
+      "pounds": 127321422,
+      "landedValueUsd": 342079520,
+      "preliminary": false
+    },
+    {
+      "year": 2013,
+      "priceCentsPerLb": 290,
+      "pounds": 127808436,
+      "landedValueUsd": 370383982,
+      "preliminary": false
+    },
+    {
+      "year": 2014,
+      "priceCentsPerLb": 370,
+      "pounds": 124325923,
+      "landedValueUsd": 459508386,
+      "preliminary": false
+    },
+    {
+      "year": 2015,
+      "priceCentsPerLb": 410,
+      "pounds": 122663393,
+      "landedValueUsd": 502450309,
+      "preliminary": false
+    },
+    {
+      "year": 2016,
+      "priceCentsPerLb": 408,
+      "pounds": 132604691,
+      "landedValueUsd": 540671929,
+      "preliminary": false
+    },
+    {
+      "year": 2017,
+      "priceCentsPerLb": 392,
+      "pounds": 112101211,
+      "landedValueUsd": 438976767,
+      "preliminary": false
+    },
+    {
+      "year": 2018,
+      "priceCentsPerLb": 405,
+      "pounds": 121039989,
+      "landedValueUsd": 490596147,
+      "preliminary": false
+    },
+    {
+      "year": 2019,
+      "priceCentsPerLb": 482,
+      "pounds": 102251477,
+      "landedValueUsd": 493125881,
+      "preliminary": false
+    },
+    {
+      "year": 2020,
+      "priceCentsPerLb": 421,
+      "pounds": 97954590,
+      "landedValueUsd": 412629231,
+      "preliminary": false
+    },
+    {
+      "year": 2021,
+      "priceCentsPerLb": 671,
+      "pounds": 110704227,
+      "landedValueUsd": 742989021,
+      "preliminary": false
+    },
+    {
+      "year": 2022,
+      "priceCentsPerLb": 397,
+      "pounds": 98985319,
+      "landedValueUsd": 393277277,
+      "preliminary": false
+    },
+    {
+      "year": 2023,
+      "priceCentsPerLb": 497,
+      "pounds": 96965544,
+      "landedValueUsd": 482061884,
+      "preliminary": false
+    },
+    {
+      "year": 2024,
+      "priceCentsPerLb": 615,
+      "pounds": 87279523,
+      "landedValueUsd": 536466702,
+      "preliminary": false
+    },
+    {
+      "year": 2025,
+      "priceCentsPerLb": 585,
+      "pounds": 78826683,
+      "landedValueUsd": 461384405,
+      "preliminary": true
+    }
+  ],
+  "sourceSha256": "d24b04f2757f65e5797a481d3fd659f2085b805d0cda943ba731e6207d78451f"
+}

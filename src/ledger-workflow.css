@@ -1,0 +1,367 @@
+/* Keep each piece of wager metadata intact when a narrow row wraps. */
+.bet-title-cell > .bet-meta,
+.compact-table .bet-title-cell > .bet-meta {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 2px;
+  white-space: normal;
+}
+.bet-title-cell > .bet-meta > span,
+.compact-table .bet-title-cell > .bet-meta > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+/* The separator trails every item but the last, so a wrapped line never starts with a dot. */
+.bet-meta > span:not(:last-child)::after {
+  content: '·';
+  color: #84907f;
+  flex-shrink: 0;
+}
+.bet-meta > .bet-offset {
+  font-weight: 600;
+}
+/* The viewer's own move leads the line, so a long ledger shows which rows wait on them. */
+.bet-meta > .bet-move {
+  font-weight: 700;
+  color: var(--green);
+}
+/* Wide tables name both bettors in the Between column; narrower rows say who it is with here. */
+.bet-title-cell > .bet-meta > .bet-with {
+  display: none;
+}
+.compact-table .bet-title-cell > .bet-meta > .bet-with {
+  display: inline-flex;
+}
+@media (max-width: 1000px) {
+  .bet-title-cell > .bet-meta > .bet-with {
+    display: inline-flex;
+  }
+}
+.ledger-search-row {
+  flex-wrap: wrap;
+}
+.ledger-secondary-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.entry-source-filter {
+  white-space: nowrap;
+  font-size: 12px;
+}
+/* The select matches the search field beside it: same corner, border and padding in both themes. */
+.entry-source-filter select {
+  padding: 9px 12px;
+  border: 1px solid #e2e7dc;
+  border-radius: 6px;
+}
+html[data-theme='dark'] .entry-source-filter select {
+  border-color: var(--border);
+}
+/* The ledger says how many bets its filters leave, under the controls and ahead of the table. */
+.ledger-result-summary {
+  margin: 0;
+  padding: 0 var(--ledger-gutter, 22px) 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+/* One gutter for the chips, the search row, the result line, the table and its footer, so their left
+   edges line up on every width. */
+.ledger-page {
+  --ledger-gutter: 22px;
+}
+.ledger-page .filter-tabs,
+.ledger-page .ledger-search-row,
+.ledger-page .bet-table-head,
+.ledger-page .bet-row,
+.ledger-page .table-footer {
+  padding-inline: var(--ledger-gutter);
+}
+/* The footer is one line of text; the leaderboard's two-part footer keeps its own narrow columns. */
+.ledger-page .table-footer > span {
+  max-width: none;
+  text-align: left;
+}
+@media (max-width: 1000px) {
+  .ledger-page {
+    --ledger-gutter: 18px;
+  }
+}
+@media (max-width: 760px) {
+  .ledger-page {
+    --ledger-gutter: 16px;
+  }
+}
+.heading-actions {
+  flex-wrap: wrap;
+}
+/* A heading wraps into balanced lines, and a one-word last line ("for.") is avoided in its subtitle. */
+.page-heading h1 {
+  text-wrap: balance;
+}
+.page-heading p {
+  text-wrap: pretty;
+}
+/* Below the sidebar-plus-content breakpoint the title and the buttons share a row only while both
+   fit. Otherwise the buttons move as one nowrap group under the title, instead of the group itself
+   breaking so that New bet drops to a second row on its own. */
+@media (max-width: 1000px) {
+  .page-heading {
+    flex-wrap: wrap;
+  }
+  .page-heading .heading-actions {
+    flex-wrap: nowrap;
+    width: auto;
+  }
+}
+.history-entry-button {
+  white-space: nowrap;
+}
+.waiting-panel {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.waiting-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0 20px 16px;
+  column-gap: 24px;
+}
+.waiting-list > li {
+  min-width: 0;
+}
+.waiting-list > li:only-child {
+  grid-column: 1 / -1;
+}
+.waiting-bet {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 16px 4px;
+  text-align: left;
+  color: var(--muted-strong);
+  border-top: 1px solid #e4e8e1;
+  min-width: 0;
+}
+.waiting-bet > svg {
+  flex-shrink: 0;
+}
+.waiting-bet > span {
+  flex: 1;
+  min-width: 0;
+}
+.waiting-bet strong {
+  display: block;
+  color: #27393b;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.waiting-bet small {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.waiting-bet:hover {
+  color: #153b3e;
+  background: #f7f8f5;
+}
+.waiting-bet:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+/* A long audit entry shows its first lines; the bet sheet has the whole text. */
+.inbox-activity p {
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+.inbox-activity-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 22px 18px;
+  border-top: 1px solid var(--border);
+}
+.inbox-activity-count {
+  font-size: 12px;
+  color: var(--muted);
+}
+/* Feed rows read like next moves: the bet first and strongest, what happened under it, then who and
+   when. The hairlines run edge to edge on both sides of the inbox, and a wash and a chevron say that
+   the whole row opens the bet. */
+.inbox-activity {
+  padding: 0;
+}
+.inbox-activity button {
+  align-items: flex-start;
+  padding: 18px 22px;
+  text-align: left;
+}
+.inbox-activity li:first-child button {
+  border-top: 0;
+}
+.inbox-activity button:hover {
+  background: var(--surface-hover, #edf3e6);
+}
+.inbox-activity .avatar {
+  flex: 0 0 auto;
+}
+.inbox-activity button > span:not(.avatar) {
+  flex: 1 1 auto;
+}
+.inbox-activity strong {
+  margin: 0 0 3px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #27393b;
+}
+html[data-theme='dark'] .inbox-activity strong {
+  color: var(--text);
+}
+.inbox-activity-chevron {
+  flex: 0 0 auto;
+  align-self: center;
+  color: var(--muted);
+}
+/* A short list of next moves stays in view while the longer feed scrolls past it, so the page has no
+   void beside it. Past a handful of rows, or on a short window, it would hide its own foot. */
+@media (min-width: 1001px) and (min-height: 760px) {
+  .inbox-columns > .inbox-next-moves.is-short {
+    position: sticky;
+    top: 16px;
+  }
+}
+/* Over to you: the footer link sits at the panel's foot however short the list is, and the cards' edges
+   line up with the heading, the count and "Showing 3 of N". */
+.approvals-panel {
+  display: flex;
+  flex-direction: column;
+}
+.approvals-panel .approval-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.approvals-panel .approval-list {
+  padding-inline: 22px;
+}
+@media (max-width: 1200px) {
+  .approvals-panel .approval-list {
+    padding-inline: 17px;
+  }
+}
+@media (max-width: 1000px) {
+  .approvals-panel .approval-list {
+    padding-inline: 18px;
+  }
+}
+@media (max-width: 520px) {
+  .approvals-panel .approval-list {
+    padding-inline: 17px;
+  }
+}
+.mini-leaderboard {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* The space after the name keeps "Ellis you" from reading as one word, so the tag needs less margin. */
+.mini-leader strong small {
+  margin-left: 3px;
+}
+/* The secondary stat cards share the hero card's height. The figures keep level with the hero's and
+   each caption drops to the foot, in line with the hero's link, so no band is left empty under it. */
+@media (min-width: 521px) {
+  .stats-grid .stat-card:not(.balance-feature) {
+    display: flex;
+    flex-direction: column;
+  }
+  .stats-grid .stat-card:not(.balance-feature) p {
+    margin-top: auto;
+  }
+}
+/* On the narrowest phones "Owed to you" wraps beside its icon; both labels keep two lines of room so
+   the figures in a pair of cards stay level. */
+@media (max-width: 360px) {
+  .stats-grid .stat-card:not(.balance-feature):not(:last-child) .stat-label {
+    min-height: 36px;
+  }
+}
+/* In the narrow hero card of a small laptop the roll sits at the top right, above the link, so neither
+   the link nor its focus ring runs into it. */
+@media (min-width: 1001px) and (max-width: 1230px) {
+  .balance-feature .balance-illustration {
+    width: 96px;
+    right: -12px;
+    top: 44px;
+    bottom: auto;
+  }
+}
+/* "Where it all went down" keeps to one line; the link drops beneath it when the panel is too
+   narrow for both. */
+.map-preview .section-title {
+  flex-wrap: wrap;
+  row-gap: 2px;
+}
+.map-preview .section-title .text-button {
+  margin-left: auto;
+}
+/* The footer carries the house rule, so it is set at the size of the other small print. On a phone the
+   two statements stack, each on its own line, instead of wrapping unevenly. */
+.workspace-footer {
+  font-size: 12px;
+}
+@media (max-width: 520px) {
+  .workspace-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .workspace-footer > span:first-child,
+  .workspace-footer > span:last-child {
+    max-width: none;
+    text-align: left;
+  }
+}
+@media (max-width: 760px) {
+  .inbox-activity-foot {
+    padding-inline: 18px;
+  }
+  .waiting-list {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0 16px 12px;
+  }
+  .page-heading .heading-actions {
+    width: 100%;
+    gap: 8px;
+  }
+  .page-heading .heading-actions > button {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-height: 44px;
+  }
+}
+/* Below 520px Export shows only its icon. It stays a 44px square instead of taking a share of the
+   row with the two wider buttons. */
+@media (max-width: 520px) {
+  .page-heading .heading-actions > .export-button {
+    flex: 0 0 auto;
+  }
+}

@@ -1,0 +1,931 @@
+/* Light-theme ink tokens. Every text colour is checked on the surfaces it sits on: the cream page, white
+   cards and the pale green and gold tints. The dark block below redefines each one. */
+:root {
+  /* Secondary text: 4.5:1 or better on the cream page, white cards and the pale green tints. */
+  --muted-strong: #5a685b;
+  /* Warning text (an overdue update, a preliminary figure): 4.5:1 on white, the page and the gold tint. */
+  --gold-text: #80601a;
+}
+
+/* Dark mode is the default; the toggle keeps the lighter original palette available. */
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --green: #8dc8bb;
+  --red: #ef8a78;
+  --muted: #9aa9a5;
+  --muted-strong: #a8b8b3;
+  --border: #2c3e40;
+  --surface: #1a292b;
+  --surface-inset: #142326;
+  --surface-raised: #1d3031;
+  --focus-ring: #c58b42;
+  --field-bg: #142326;
+  --field-border: #64807c;
+  --field-border-hover: #8aa6a1;
+  --surface-hover: #243a3b;
+  --surface-selected: #284847;
+  --text: #e5eeeb;
+  --gold: #e4c17d;
+  --gold-text: var(--gold);
+  --status-green-bg: #233e34;
+  --status-green-border: #3d6050;
+  --status-gold-bg: #3b3323;
+  --status-gold-border: #665738;
+  --status-red-bg: #402d29;
+  --status-red-border: #70483e;
+  --status-blue-bg: #243846;
+  --status-blue-border: #46627a;
+  --shadow: 0 2px 8px #00000030;
+  color: #e5eeeb;
+  background: #101b1d;
+}
+
+html[data-theme='dark'] body {
+  color: #e5eeeb;
+  background: #101b1d;
+}
+
+html[data-theme='dark'] ::selection {
+  background: #31534f;
+}
+
+html[data-theme='dark'] .sidebar,
+html[data-theme='dark'] .topbar,
+html[data-theme='dark'] .welcome-screen,
+html[data-theme='dark'] .loading-screen {
+  background: #152224;
+}
+
+html[data-theme='dark'] .sidebar,
+html[data-theme='dark'] .topbar {
+  border-color: #2c3e40;
+}
+
+html[data-theme='dark'] .main-shell,
+html[data-theme='dark'] .workspace {
+  background: #101b1d;
+}
+
+html[data-theme='dark'] .workspace-switch,
+html[data-theme='dark'] .panel,
+html[data-theme='dark'] .stat-card,
+html[data-theme='dark'] .member-card,
+html[data-theme='dark'] .bet-detail,
+html[data-theme='dark'] .modal-content,
+html[data-theme='dark'] .detail-sheet,
+html[data-theme='dark'] .position-card,
+html[data-theme='dark'] .leaderboard-row,
+html[data-theme='dark'] .place-item,
+html[data-theme='dark'] .invite-member-card {
+  color: #e5eeeb;
+  background: #1a292b;
+  border-color: #2c3e40;
+  box-shadow: var(--shadow);
+}
+
+html[data-theme='dark'] .workspace-symbol,
+html[data-theme='dark'] .house-rule,
+html[data-theme='dark'] .demo-bar,
+html[data-theme='dark'] .map-loading {
+  background: var(--surface-raised);
+  border-color: #304647;
+}
+
+/* A warning stays a warning: the neutral card fill would erase its light-theme gold tone. */
+html[data-theme='dark'] .connection-notice {
+  color: var(--gold);
+  background: var(--status-gold-bg);
+  border-color: var(--status-gold-border);
+}
+/* The component's information tone is neutral; the default stays the warning gold above. */
+html[data-theme='dark'] .connection-notice[data-tone='info'] {
+  color: var(--text);
+  background: var(--surface-raised);
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] .welcome-pending-bet {
+  color: var(--text);
+}
+
+/* The Overview hero card keeps its emphasis: a deeper teal than the plain stat cards. */
+html[data-theme='dark'] .balance-feature {
+  background: #214a4a;
+  border-color: #3d6a66;
+}
+/* Qualified with .stat-card so these outrank the shared muted-text lists below: the hero's caption and
+   unit sat at 4.0:1 on the deeper teal when those won. */
+html[data-theme='dark'] .stat-card.balance-feature .stat-label,
+html[data-theme='dark'] .stat-card.balance-feature p {
+  color: #d1e0d4;
+}
+html[data-theme='dark'] .stat-card.balance-feature .stat-value span {
+  color: #b9d3c7;
+}
+
+html[data-theme='dark'] h1,
+html[data-theme='dark'] h2,
+html[data-theme='dark'] h3,
+html[data-theme='dark'] strong,
+html[data-theme='dark'] .brand,
+html[data-theme='dark'] .nav-item.active,
+html[data-theme='dark'] .waiting-bet strong,
+html[data-theme='dark'] .detail-title,
+html[data-theme='dark'] .stat-value {
+  color: #edf5f1;
+}
+
+html[data-theme='dark'] p,
+html[data-theme='dark'] small,
+html[data-theme='dark'] .nav-item,
+html[data-theme='dark'] .nav-label,
+html[data-theme='dark'] .breadcrumb,
+html[data-theme='dark'] .page-heading p,
+html[data-theme='dark'] .panel-subtitle,
+html[data-theme='dark'] .stat-label,
+html[data-theme='dark'] .stat-card p,
+html[data-theme='dark'] .demo-bar,
+html[data-theme='dark'] .muted,
+html[data-theme='dark'] .waiting-bet,
+html[data-theme='dark'] .form-note {
+  color: #9aaba6;
+}
+/* Outranks the shared :is(...) surface rule below so the warning reads as a warning. */
+html[data-theme='dark'] :is(.bet-form, .inline-action-form) .form-note.duplicate-warning {
+  color: #e6c98a;
+  background: var(--status-gold-bg);
+  border-color: var(--status-gold-border);
+}
+
+html[data-theme='dark'] .nav-item:hover,
+html[data-theme='dark'] .icon-button:hover,
+html[data-theme='dark'] .waiting-bet:hover,
+html[data-theme='dark'] .button-secondary:hover {
+  background: #243a3b;
+}
+
+html[data-theme='dark'] .nav-item.active {
+  background: #284847;
+  color: #b9e0d4;
+}
+
+html[data-theme='dark'] .nav-item small,
+html[data-theme='dark'] .nav-item .nav-count {
+  background: #294242;
+  border-color: #3b5a57;
+  color: #b4d6cd;
+}
+
+html[data-theme='dark'] .nav-divider,
+html[data-theme='dark'] .waiting-bet,
+html[data-theme='dark'] .table-footer,
+html[data-theme='dark'] .section-title,
+html[data-theme='dark'] .adjudication-method,
+html[data-theme='dark'] .prompt-signatures {
+  border-color: #2c3e40;
+}
+
+html[data-theme='dark'] input,
+html[data-theme='dark'] textarea,
+html[data-theme='dark'] select,
+html[data-theme='dark'] .global-search {
+  color: #e5eeeb;
+  background: var(--field-bg);
+  border-color: var(--field-border);
+}
+
+/* The search wrapper owns the fill; the input inside stays transparent so no second box shows. */
+html[data-theme='dark'] .search-field {
+  background: var(--surface-inset);
+}
+html[data-theme='dark'] :is(.global-search, .search-field) input {
+  background: transparent;
+}
+
+html[data-theme='dark'] input::placeholder,
+html[data-theme='dark'] textarea::placeholder {
+  color: #82938f;
+}
+
+html[data-theme='dark'] .button-secondary {
+  color: #c5d5d0;
+  background: #1a292b;
+  border-color: #415453;
+}
+
+html[data-theme='dark'] .button-primary {
+  color: #10201f;
+  background: #8dc8bb;
+  border-color: #8dc8bb;
+}
+
+html[data-theme='dark'] .button-primary:hover {
+  background: #a6d9ce;
+}
+
+html[data-theme='dark'] .button-danger {
+  color: #2a1310;
+  background: var(--red);
+  border-color: var(--red);
+}
+
+html[data-theme='dark'] .button-danger:hover {
+  background: #f4a294;
+  border-color: #f4a294;
+}
+
+/* The sun keeps its warm colour; the button is not filled, so it does not read as a pressed toggle
+   beside the bell and avatar. Its hover fill is the shared icon-button one. */
+html[data-theme='dark'] .theme-toggle {
+  color: #f4c978;
+}
+
+html[data-theme='dark'] .status-active {
+  color: #a8d8b7;
+  background: var(--status-green-bg);
+  border-color: var(--status-green-border);
+}
+
+/* Settled is an outline, so it never reads as the filled green of a bet in play. */
+html[data-theme='dark'] .status-settled {
+  color: #a8d8b7;
+  background: transparent;
+  border-color: var(--status-green-border);
+}
+
+html[data-theme='dark'] .status-pending {
+  color: var(--gold);
+  background: var(--status-gold-bg);
+  border-color: var(--status-gold-border);
+}
+
+/* Confirming a result or a reported history has its own cool tone, apart from a proposal's gold. */
+html[data-theme='dark'] :is(.status-confirming, .status-history) {
+  color: #a9cde0;
+  background: var(--status-blue-bg);
+  border-color: var(--status-blue-border);
+}
+
+html[data-theme='dark'] :is(.status-settling, .status-owed) {
+  color: #f0b29a;
+  background: var(--status-red-bg);
+  border-color: var(--status-red-border);
+}
+
+html[data-theme='dark'] :is(.status-voided, .status-declined.status-withdrawn) {
+  color: #b5c2be;
+  background: var(--surface-raised);
+  border-color: #415453;
+}
+
+html[data-theme='dark'] .status-declined {
+  color: #f0b29a;
+  background: transparent;
+  border-color: var(--status-red-border);
+}
+
+html[data-theme='dark'] .prompt-record,
+html[data-theme='dark'] .result-block {
+  background: var(--surface-raised);
+  border-color: #3a5956;
+}
+
+/* The delivery block is also a .result-block; it keeps the warm tone it has in the light theme so the two stay apart. */
+html[data-theme='dark'] .settlement-block {
+  background: var(--status-gold-bg);
+  border-color: var(--status-gold-border);
+}
+
+/* Unboxed sheet sections have no padding or radius: a fill would sit flush against the text. */
+html[data-theme='dark'] :is(.adjudication-record, .terms-block, .audit-note) {
+  border-color: var(--border);
+}
+html[data-theme='dark'] .adjudication-record {
+  border-left-color: var(--green);
+}
+
+html[data-theme='dark'] .prompt-record pre,
+html[data-theme='dark'] .export-options button {
+  color: #d7e5e0;
+  background: #142326;
+  border-color: #344b4c;
+}
+
+html[data-theme='dark'] .modal-overlay,
+html[data-theme='dark'] .mobile-nav-backdrop {
+  background: #071012b8;
+}
+
+html[data-theme='dark'] .welcome-trust {
+  color: #9aaba6;
+}
+
+html[data-theme='dark'] .map-preview,
+html[data-theme='dark'] .full-map-panel {
+  background: #1b2b2c;
+  border-color: #304647;
+}
+
+html[data-theme='dark'] .map-preview img,
+html[data-theme='dark'] .leaflet-tile {
+  filter: brightness(0.72) saturate(0.75);
+}
+
+/* Nested surfaces must follow the theme too, including portaled dialogs and selects. */
+html[data-theme='dark']
+  :is(
+    .bet-table-head,
+    .leaderboard-table-head,
+    .leaderboard-foot,
+    .detail-sheet > .modal-heading,
+    .lifecycle,
+    .member-stats,
+    .balance-disclaimer,
+    .member-switcher-content,
+    .member-switcher-scroll,
+    .demo-switcher .member-switcher-trigger
+  ) {
+  color: var(--text);
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+html[data-theme='dark']
+  :is(
+    .balance-summary,
+    .leaderboard-banner,
+    .members-intro,
+    .positions-form,
+    .form-note,
+    .next-action,
+    .workflow-review,
+    .workflow-acknowledgements,
+    .workflow-acknowledgements > legend,
+    .place-symbol,
+    .invite-success,
+    .welcome-emblem,
+    .invite-member-card > span:first-child,
+    .house-rules-list li > span,
+    .filter-tabs button span,
+    .mini-leader strong small,
+    .leaderboard-member small,
+    .member-card h3 small,
+    .prompt-record > div:first-child > span
+  ) {
+  color: var(--green);
+  background: var(--surface-raised);
+  border-color: var(--border);
+}
+
+html[data-theme='dark']
+  :is(
+    .bet-row,
+    .mini-leader,
+    .approval-footer,
+    .person-balance,
+    .group-balance,
+    .place-help,
+    .inbox-activity button,
+    .modal-footer,
+    .detail-location,
+    .workflow-fields,
+    .workflow-record,
+    .workflow-signatures,
+    .workflow-tools,
+    .workflow-prior,
+    .workflow-inset,
+    .demo-explainer,
+    .search-field,
+    .avatar-pair .avatar + .avatar,
+    .notification-button i
+  ) {
+  border-color: var(--border);
+}
+
+html[data-theme='dark'] :is(.nav-divider, .rate-bar),
+html[data-theme='dark'] .lifecycle-step:after,
+html[data-theme='dark'] .timeline li:before {
+  background: var(--border);
+}
+
+html[data-theme='dark']
+  :is(
+    .bet-row:hover,
+    .approval-footer:hover,
+    .export-options > button:hover,
+    .demo-switcher .member-switcher-trigger:hover,
+    .demo-switcher .member-switcher-trigger[data-state='open']
+  ) {
+  background: var(--surface-hover);
+  border-color: #415453;
+}
+
+html[data-theme='dark']
+  :is(
+    .filter-tabs button.selected,
+    .filter-tabs button.selected span,
+    .leaderboard-row.your-row,
+    .place-item.selected,
+    .member-switcher-item[data-state='checked']
+  ) {
+  color: #b9e0d4;
+  background: var(--surface-selected);
+}
+
+html[data-theme='dark'] .member-switcher-item[data-highlighted] {
+  background: var(--surface-hover);
+  box-shadow: inset 0 0 0 2px var(--green);
+}
+
+/* Override the light palette's explicit text colors, not just inherited body text. */
+html[data-theme='dark']
+  :is(
+    .bet-form label,
+    .inline-action-form label,
+    .invite-result label,
+    .workflow-inset h4,
+    .workflow-fieldset > legend,
+    .workflow-facts dd,
+    .workflow-signatures > div,
+    .workflow-tools summary,
+    .workflow-prior summary,
+    .stake-cell,
+    .bet-people > span:last-child,
+    .inbox-activity p,
+    .offset-entry p
+  ) {
+  color: var(--text);
+}
+
+html[data-theme='dark']
+  :is(
+    .date-eyebrow,
+    .workspace-switch small,
+    .sidebar-profile small,
+    .invite-sidebar,
+    .notification-button,
+    .mobile-close,
+    .mobile-menu,
+    .modal-heading > .icon-button,
+    .stat-value > span,
+    .stat-period,
+    .stat-card:where(:not(.balance-feature)) .stat-label,
+    .stat-card:where(:last-child) .stat-label,
+    .stat-card:where(:last-child) p,
+    .panel-tabs button,
+    .panel-tabs > span,
+    .bet-table-head,
+    .leaderboard-table-head,
+    .bet-title-cell > small,
+    .compact-table .bet-title-cell > small,
+    .bet-people small,
+    .dot-separator,
+    .stake-cell svg,
+    .row-chevron,
+    .mini-leader > div > span,
+    .leader-score small,
+    .leaderboard-foot,
+    .map-preview-foot,
+    .workspace-footer,
+    .filter-tabs button,
+    .checkbox-label,
+    .table-footer,
+    .search-field,
+    .balance-summary > div > span,
+    .person-balance > div span,
+    .balance-disclaimer,
+    .group-balance > svg,
+    .group-balance strong svg,
+    .sort-control,
+    .place-item > svg,
+    .member-role,
+    .member-stats span,
+    .input-affix > span,
+    .optional,
+    .hint,
+    .positions-form .versus,
+    .record-id,
+    .detail-facts,
+    .detail-location,
+    .lifecycle-step small,
+    .result-block h3 > span,
+    .timeline-heading > span,
+    .audit-note,
+    .workflow-facts dt,
+    .workflow-record .workflow-provenance,
+    .workflow-fields .hint,
+    .workflow-acknowledgements .hint,
+    .next-action > .revise-prompt,
+    .member-switcher-heading,
+    .member-switcher-chevron,
+    .member-switcher-scroll
+  ) {
+  color: var(--muted);
+}
+
+html[data-theme='dark']
+  :is(
+    .green,
+    .approval-footer,
+    .place-bet-count,
+    .invite-label,
+    .detail-location strong,
+    .adjudication-method > svg,
+    .adjudication-record > a,
+    .prompt-record > div:first-child,
+    .prompt-record summary,
+    .prompt-signatures > span,
+    .workflow-record a,
+    .member-switcher-check,
+    .lifecycle-step.complete small,
+    .house-rule > span svg,
+    .export-options > button > svg,
+    .result-block > svg
+  ) {
+  color: var(--green);
+}
+
+html[data-theme='dark'] .red {
+  color: var(--red);
+}
+/* The viewer's own row is tinted lighter than a card, where --red falls to 4.1:1. */
+html[data-theme='dark'] .leaderboard-row.your-row .red {
+  color: #f4a090;
+}
+
+html[data-theme='dark'] .rank {
+  color: var(--muted);
+}
+
+html[data-theme='dark']
+  :is(.filter-tabs button.selected, .panel-tabs button.selected, .place-item.selected small) {
+  color: #b9e0d4;
+}
+
+html[data-theme='dark'] :is(.rank-1, .approval-count) {
+  color: var(--gold);
+}
+html[data-theme='dark'] .rank-2 {
+  color: #a8c3c0;
+}
+html[data-theme='dark'] .rank-3 {
+  color: #d0a98a;
+}
+html[data-theme='dark'] :is(.leaderboard-row, .mini-leader) .rank-1 {
+  --medal-fill: var(--status-gold-bg);
+  --medal-ring: var(--gold);
+}
+html[data-theme='dark'] :is(.leaderboard-row, .mini-leader) .rank-2 {
+  --medal-fill: var(--surface-raised);
+  --medal-ring: #a8c3c0;
+}
+html[data-theme='dark'] :is(.leaderboard-row, .mini-leader) .rank-3 {
+  --medal-fill: var(--status-red-bg);
+  --medal-ring: #d0a98a;
+}
+/* A notice the reader should not skim past: page ink, not the muted paragraph ink. */
+html[data-theme='dark'] .market-update-notice {
+  color: var(--text);
+}
+/* The lead sentence answers the page's question: page ink, not the muted paragraph ink. */
+html[data-theme='dark'] .leader-note {
+  color: var(--text);
+}
+html[data-theme='dark'] .leaderboard-waiting {
+  border-color: var(--border);
+}
+html[data-theme='dark'] .leaderboard-waiting small {
+  color: var(--green);
+  background: var(--surface-raised);
+}
+
+html[data-theme='dark'] .empty-icon {
+  color: var(--green);
+  background: var(--surface-selected);
+}
+html[data-theme='dark'] :is(.green-icon, .red-icon, .gold-icon, .banner-icon) {
+  color: var(--green);
+  background: var(--surface-raised);
+}
+html[data-theme='dark'] .red-icon {
+  color: var(--red);
+  background: var(--status-red-bg);
+}
+html[data-theme='dark'] :is(.gold-icon, .banner-icon) {
+  color: var(--gold);
+  background: var(--status-gold-bg);
+}
+
+html[data-theme='dark'] .lifecycle-step > span {
+  color: var(--muted);
+  background: var(--surface-inset);
+  border-color: #415453;
+}
+html[data-theme='dark'] .lifecycle-step.complete > span {
+  color: #10201f;
+  background: var(--green);
+  border-color: var(--green);
+}
+html[data-theme='dark'] .lifecycle-step.closed > span {
+  color: #10201f;
+  background: #b9c6c2;
+  border-color: #b9c6c2;
+}
+html[data-theme='dark'] .lifecycle-step.closed small {
+  color: #d3ddda;
+}
+html[data-theme='dark'] .lifecycle-step.complete:after,
+html[data-theme='dark'] .panel-tabs button.selected:after,
+html[data-theme='dark'] .rate-bar i {
+  background: var(--green);
+}
+html[data-theme='dark'] .timeline-dot {
+  background: var(--green);
+  border-color: var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+html[data-theme='dark']
+  :is(.bet-form input:hover, .bet-form textarea:hover, .bet-form select:hover) {
+  border-color: var(--field-border-hover);
+}
+html[data-theme='dark']
+  :is(.bet-form .workflow-checkbox > input, .inline-action-form .workflow-checkbox > input) {
+  accent-color: var(--green);
+}
+html[data-theme='dark'] .detail-sheet .bet-detail > .form-note {
+  color: var(--muted);
+}
+html[data-theme='dark'] .form-error {
+  color: #f0b29a;
+  background: var(--status-red-bg);
+  border-color: var(--status-red-border);
+}
+/* A field's own message keeps the error ink; the dark paragraph colour would otherwise win. */
+html[data-theme='dark'] .field-error {
+  color: var(--red);
+}
+html[data-theme='dark']
+  :is(.price-history-panel, .price-summary .panel, .price-observation, .segmented-button) {
+  border-color: var(--border);
+}
+html[data-theme='dark'] :is(.price-observation strong, .price-stat, .price-history-panel h2) {
+  color: var(--text);
+}
+html[data-theme='dark'] :is(.price-observation small, .price-stat small, .segmented-button) {
+  color: var(--muted);
+}
+html[data-theme='dark'] .price-delta {
+  color: var(--muted-strong);
+  background: var(--surface-raised);
+}
+html[data-theme='dark'] .price-delta.up {
+  color: var(--red);
+  background: var(--status-red-bg);
+}
+html[data-theme='dark'] .price-delta.down {
+  color: var(--green);
+  background: var(--status-green-bg);
+}
+html[data-theme='dark'] .segmented-button.selected {
+  background: var(--surface-inset);
+  color: var(--text);
+  border-color: #63847f;
+}
+html[data-theme='dark'] .price-chart-grid {
+  stroke: var(--border);
+}
+html[data-theme='dark'] .price-correct-button {
+  color: var(--muted-strong);
+}
+
+/* Leaflet loads lazily: explicit scoped selectors also beat its later stylesheet. */
+html[data-theme='dark'] :is(.places-map, .places-map-canvas) {
+  background: var(--surface-inset);
+}
+html[data-theme='dark']
+  :is(
+    .places-map .leaflet-control-zoom,
+    .places-map .leaflet-control-zoom a,
+    .places-map .leaflet-control-attribution,
+    .places-map .leaflet-popup-content-wrapper,
+    .places-map .leaflet-popup-tip,
+    .places-map-external,
+    .places-map-credit,
+    .places-map-empty,
+    .places-map-pick
+  ) {
+  color: var(--text);
+  background: var(--surface);
+  border-color: #415453;
+  box-shadow: var(--shadow);
+}
+/* In the strip the chip and the attribution sit flat on it, not as floating labels. */
+html[data-theme='dark']
+  :is(
+    .places-map-credit,
+    .places-map-credit .places-map-external,
+    .places-map .places-map-credit .leaflet-control-attribution
+  ) {
+  box-shadow: none;
+}
+html[data-theme='dark'] .places-map .places-map-credit .leaflet-control-attribution {
+  color: var(--muted-strong);
+  background: none;
+  border-color: transparent;
+}
+html[data-theme='dark']
+  :is(
+    .places-map .leaflet-control-attribution a,
+    .places-map-popup a,
+    .places-map a.leaflet-popup-close-button
+  ) {
+  color: var(--green);
+}
+html[data-theme='dark'] .places-map-popup {
+  color: var(--text);
+}
+html[data-theme='dark']
+  :is(
+    .places-map .places-map-popup p,
+    .places-map-empty strong,
+    .places-map .leaflet-control-zoom a.leaflet-disabled
+  ) {
+  color: var(--muted);
+}
+html[data-theme='dark'] :is(.places-map .leaflet-control-zoom a:hover, .places-map-external:hover) {
+  background: var(--surface-hover);
+}
+html[data-theme='dark'] .places-map-notice {
+  color: var(--gold);
+  background: var(--status-gold-bg);
+}
+html[data-theme='dark'] .places-map-pick button {
+  color: #10201f;
+  background: var(--green);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme='dark'] body,
+  html[data-theme='dark'] .sidebar,
+  html[data-theme='dark'] .topbar,
+  html[data-theme='dark'] .panel,
+  html[data-theme='dark'] .stat-card,
+  html[data-theme='dark'] .modal-content {
+    transition:
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      color 0.18s ease;
+  }
+}
+
+/* Bet sheet records: review status, compare grid and pending result states. */
+html[data-theme='dark'] .workflow-facts .review-status dd {
+  color: var(--text);
+  background: var(--surface-inset);
+  border-color: var(--border);
+}
+html[data-theme='dark'] .workflow-facts .review-status-ready dd {
+  color: #a8d8b7;
+  background: var(--status-green-bg);
+  border-color: var(--status-green-border);
+}
+html[data-theme='dark'] .workflow-facts .review-status-due dd,
+html[data-theme='dark'] .workflow-passed,
+html[data-theme='dark'] .compare-changed .compare-state {
+  color: var(--gold);
+  background: var(--status-gold-bg);
+  border-color: var(--status-gold-border);
+}
+html[data-theme='dark'] .workflow-facts .review-status-paused dd {
+  color: #c5d5d0;
+  background: var(--surface-raised);
+  border-color: #415453;
+}
+html[data-theme='dark'] .compare-added .compare-state {
+  color: #a8d8b7;
+  background: var(--status-green-bg);
+  border-color: var(--status-green-border);
+}
+html[data-theme='dark'] .compare-removed .compare-state {
+  color: #f0b29a;
+  background: var(--status-red-bg);
+  border-color: var(--status-red-border);
+}
+html[data-theme='dark'] .compare-unchanged .compare-state {
+  color: var(--muted);
+  border-color: #415453;
+}
+html[data-theme='dark'] .compare-row {
+  border-color: var(--border);
+}
+html[data-theme='dark'] :is(.compare-field, .compare-row dd) {
+  color: var(--text);
+}
+html[data-theme='dark'] :is(.compare-row dt, .compare-label, .compare-row .compare-same) {
+  color: var(--muted);
+}
+html[data-theme='dark'] .workflow-facts dd > .workflow-provenance {
+  color: var(--muted);
+}
+html[data-theme='dark'] .workflow-notice {
+  background: var(--status-gold-bg);
+  border-color: var(--status-gold-border);
+  border-left-color: var(--gold);
+}
+html[data-theme='dark'] .workflow-notice p {
+  color: #ecd9a8;
+}
+html[data-theme='dark'] .workflow-changes > ul > li {
+  color: var(--text);
+}
+html[data-theme='dark'] div.workflow-changes > p {
+  color: var(--muted);
+}
+html[data-theme='dark'] .your-move {
+  color: #10201f;
+  background: var(--green);
+}
+/* The page's light strong text would sit on this light bar, so the label takes the bar's ink. */
+html[data-theme='dark'] .your-move strong {
+  color: inherit;
+}
+html[data-theme='dark'] .your-move:hover {
+  background: #a6d9ce;
+}
+/* A waiting block keeps its own fill (raised result, warm delivery) and loses the done block's teal edge. */
+html[data-theme='dark'] .result-block.result-pending {
+  border-color: var(--border);
+}
+html[data-theme='dark'] .result-block.result-pending > svg,
+html[data-theme='dark'] :is(.result-signatures > li.waiting, .prompt-signatures > li.waiting) {
+  color: var(--muted);
+}
+html[data-theme='dark'] :is(.result-block .result-meta, .result-block .result-consequence) {
+  color: #b5c2be;
+}
+html[data-theme='dark'] :is(.result-signatures > li, .prompt-signatures > li) {
+  color: var(--text);
+}
+html[data-theme='dark'] .prompt-signatures small {
+  color: var(--muted);
+}
+html[data-theme='dark'] .prompt-record > p {
+  color: #b5c2be;
+}
+html[data-theme='dark'] .prompt-record pre.prompt-text-capped {
+  --prompt-bg: #142326;
+  background:
+    linear-gradient(var(--prompt-bg) 30%, transparent) center top / 100% 36px no-repeat local,
+    linear-gradient(transparent, var(--prompt-bg) 70%) center bottom / 100% 36px no-repeat local,
+    radial-gradient(farthest-side at 50% 0, #00000080, transparent) center top / 100% 12px no-repeat
+      scroll,
+    radial-gradient(farthest-side at 50% 100%, #00000080, transparent) center bottom / 100% 12px
+      no-repeat scroll,
+    var(--prompt-bg);
+}
+html[data-theme='dark'] .prompt-stale {
+  background: var(--status-gold-bg);
+  border-color: var(--status-gold-border);
+  border-left-color: var(--gold);
+}
+html[data-theme='dark'] .prompt-stale p {
+  color: #ecd9a8;
+}
+/* The unverified-response caveat must stay readable on the dark record surface. */
+html[data-theme='dark'] .adjudication-record > .provenance-note {
+  color: #c5d5d0;
+}
+html[data-theme='dark'] .adjudication-record > .provenance-note > svg {
+  color: var(--gold);
+}
+html[data-theme='dark'] .next-action > button.revise-prompt {
+  color: var(--green);
+}
+html[data-theme='dark'] .adjudication-record > .adjudication-verdict {
+  color: var(--text);
+}
+/* On the dark record surface the approvals chip needs its own fill and edge to read as a pill. */
+html[data-theme='dark'] .prompt-record > div:first-child > span {
+  background: var(--surface-inset);
+  border: 1px solid var(--border);
+}
+html[data-theme='dark'] .prompt-changes ul {
+  background: #142326;
+  border-color: #344b4c;
+}
+html[data-theme='dark'] .prompt-changes li {
+  color: #d7e5e0;
+}
+html[data-theme='dark'] .prompt-changes .diff-added {
+  background: var(--status-green-bg);
+  color: #a8d8b7;
+}
+html[data-theme='dark'] .prompt-changes .diff-removed {
+  background: var(--status-red-bg);
+  color: #f0b29a;
+}
+html[data-theme='dark'] .prompt-changes .diff-gap {
+  background: transparent;
+  color: var(--muted);
+}

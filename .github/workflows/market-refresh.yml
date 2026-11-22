@@ -1,0 +1,362 @@
+name: Refresh lobster market data
+
+# Checks the official Maine DMR table weekly. A changed series is committed on a data branch, the pull
+# request checks run on that commit here (pushes made with GITHUB_TOKEN start no other workflow), and only
+# then is it pushed as a data pull request. Production deploys only what a person merges.
+on:
+  schedule:
+    - cron: '23 14 * * 1'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: lobster-market-refresh
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  refresh:
+    name: Refresh market series
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      vars.ENABLE_MARKET_REFRESH == 'true'
+    runs-on: ubuntu-24.04
+    # Longer than the step timeouts added up, so a hung step fails on its own timeout first.
+    timeout-minutes: 45
+    # The token could push to any branch. The publish step's own check, not a permission, keeps pushes on
+    # data/lobster-market-* branches.
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: write
+    outputs:
+      summary: ${{ steps.summary.outputs.text }}
+    env:
+      # The check record (when and how the source was checked) is not a change to the series.
+      MARKET_SERIES_FILTER: 'del(.checkedAt, .checkMethod)'
+    steps:
+      - name: Check out source
+        id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Test market-feed importer
+        id: importer-tests
+        timeout-minutes: 5
+        run: |
+          summary="$RUNNER_TEMP/market-refresh.md"
+          printf '### Importer tests\n\n~~~text\n' >> "$summary"
+          status=0
+          {
+            python3 -m venv "$RUNNER_TEMP/lobster-market-feed" &&
+              "$RUNNER_TEMP/lobster-market-feed/bin/pip" install --quiet -r scripts/requirements-market.txt &&
+              "$RUNNER_TEMP/lobster-market-feed/bin/python" -m unittest discover -s scripts -p 'test_lobster_market_*.py'
+          } 2>&1 | tee -a "$summary" || status=$?
+          printf '~~~\n\n' >> "$summary"
+          exit "$status"
+      - name: Refresh from the official source
+        id: import
+        timeout-minutes: 5
+        run: |
+          summary="$RUNNER_TEMP/market-refresh.md"
+          printf '### Official source\n\n~~~text\n' >> "$summary"
+          status=0
+          "$RUNNER_TEMP/lobster-market-feed/bin/python" scripts/update_lobster_market.py 2>&1 | tee -a "$summary" || status=$?
+          printf '~~~\n\n' >> "$summary"
+          exit "$status"
+      - name: Compare with the committed series
+        id: compare
+        run: |
+          mkdir -p "$RUNNER_TEMP/logs"
+          exec > >(tee "$RUNNER_TEMP/logs/compare.log") 2>&1
+          summary="$RUNNER_TEMP/market-refresh.md"
+          data=src/data/lobster-market.json
+          git show "HEAD:$data" > "$RUNNER_TEMP/committed-market.json"
+          jq -S "$MARKET_SERIES_FILTER" "$RUNNER_TEMP/committed-market.json" > "$RUNNER_TEMP/committed-series.json"
+          jq -S "$MARKET_SERIES_FILTER" "$data" > "$RUNNER_TEMP/new-series.json"
+          source_updated_on=$(jq -r .sourceUpdatedOn "$data")
+          if cmp -s "$RUNNER_TEMP/committed-series.json" "$RUNNER_TEMP/new-series.json"; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            printf 'The official series is unchanged (source published %s). Only the check time differs, so nothing was committed.\n\n' "$source_updated_on" >> "$summary"
+            exit 0
+          fi
+          if [[ ! "$source_updated_on" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo '::error::The refreshed snapshot has an unexpected source date.'
+            exit 1
+          fi
+          { echo 'changed=true'; echo "source-updated-on=$source_updated_on"; } >> "$GITHUB_OUTPUT"
+          printf 'The official series changed: source published %s (committed snapshot: %s).\n\n' "$source_updated_on" "$(jq -r .sourceUpdatedOn "$RUNNER_TEMP/committed-market.json")" >> "$summary"
+      - name: Prepare the data commit
+        id: prepare
+        if: steps.compare.outputs.changed == 'true'
+        timeout-minutes: 5
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_UPDATED_ON: ${{ steps.compare.outputs.source-updated-on }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/logs"
+          exec > >(tee "$RUNNER_TEMP/logs/prepare.log") 2>&1
+          summary="$RUNNER_TEMP/market-refresh.md"
+          fail() {
+            echo "::error title=$1::$2"
+            printf '**%s**\n\n' "$2" >> "$summary"
+            exit 1
+          }
+          [[ "$SOURCE_UPDATED_ON" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] || fail 'Unexpected source date' 'The refreshed snapshot has an unexpected source date.'
+          data=src/data/lobster-market.json
+
+          # Update the one open data pull request if there is one; otherwise branch from main.
+          existing=$(gh api "repos/$GITHUB_REPOSITORY/pulls?state=open&base=main&per_page=100" | jq -r --arg repo "$GITHUB_REPOSITORY" '
+            [.[] | select(.head.repo.full_name == $repo and (.head.ref | test("^data/lobster-market-[0-9]{4}-[0-9]{2}-[0-9]{2}$")))]
+            | sort_by(.number) | first | if . then "\(.number) \(.head.ref)" else "" end')
+          gh auth setup-git
+          if [[ -n "$existing" ]]; then
+            number=${existing%% *}
+            branch=${existing#* }
+            git fetch --quiet --no-tags --depth=1 origin "refs/heads/$branch"
+            base=FETCH_HEAD
+          else
+            number=''
+            branch="data/lobster-market-$SOURCE_UPDATED_ON"
+            if git ls-remote --exit-code --heads origin "refs/heads/$branch" > /dev/null; then
+              fail 'Data branch already exists' "Branch $branch already exists without an open pull request. Delete it (it is left from an earlier data pull request), then re-run this workflow."
+            fi
+            base=HEAD
+          fi
+          work="$RUNNER_TEMP/market-data-branch"
+          git worktree add --quiet --detach "$work" "$base"
+          if [[ -n "$number" && -f "$work/$data" ]] &&
+            cmp -s <(jq -S "$MARKET_SERIES_FILTER" "$work/$data") "$RUNNER_TEMP/new-series.json"; then
+            echo 'commit=false' >> "$GITHUB_OUTPUT"
+            printf 'Pull request #%s already has this series.\n\n' "$number" >> "$summary"
+            exit 0
+          fi
+          cp "$data" "$work/$data"
+          git -C "$work" add -- "$data"
+          git -C "$work" -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit --quiet -m "Update the lobster market series to the $SOURCE_UPDATED_ON DMR release" -m "Source sha256 $(jq -r .sourceSha256 "$data"), validated by $RUN_URL"
+          { echo 'commit=true'; echo "branch=$branch"; echo "number=$number"; } >> "$GITHUB_OUTPUT"
+          printf 'Committed the new series on top of `%s` as %s; it is pushed only if the checks pass.\n\n' "$branch" "$(git -C "$work" rev-parse HEAD)" >> "$summary"
+      - name: Set up pnpm
+        id: setup-pnpm
+        if: steps.prepare.outputs.commit == 'true'
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - name: Set up Node.js
+        id: setup-node
+        if: steps.prepare.outputs.commit == 'true'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Run the pull request checks on the data commit
+        id: checks
+        if: steps.prepare.outputs.commit == 'true'
+        timeout-minutes: 15
+        # This step gets no token, but it is not a security boundary: the locked dependencies' code it runs
+        # shares the runner with the publish step, as it shares the deploy job with the Cloudflare token.
+        run: |
+          mkdir -p "$RUNNER_TEMP/logs"
+          exec > >(tee "$RUNNER_TEMP/logs/checks.log") 2>&1
+          summary="$RUNNER_TEMP/market-refresh.md"
+          gates="$RUNNER_TEMP/checks.md"
+          printf '### Checks on the data commit\n\n' > "$gates"
+          cd "$RUNNER_TEMP/market-data-branch"
+          importer_tests() {
+            "$RUNNER_TEMP/lobster-market-feed/bin/pip" install --quiet -r scripts/requirements-market.txt &&
+              "$RUNNER_TEMP/lobster-market-feed/bin/python" -m unittest discover -s scripts -p 'test_lobster_market_*.py'
+          }
+          gate() {
+            local name=$1 status=0
+            shift
+            echo "::group::$name"
+            "$@" || status=$?
+            echo '::endgroup::'
+            if [[ "$status" -ne 0 ]]; then
+              echo "::error title=Check failed::$name failed on the data commit (exit $status); nothing was pushed."
+              printf -- '- `%s`: **failed** (exit %s), so nothing was pushed\n\n' "$name" "$status" >> "$gates"
+              cat "$gates" >> "$summary"
+              exit "$status"
+            fi
+            printf -- '- `%s`: passed\n' "$name" >> "$gates"
+          }
+          gate 'pnpm install --frozen-lockfile' pnpm install --frozen-lockfile
+          gate 'pnpm test' pnpm test
+          gate 'pnpm build' pnpm build
+          gate 'importer tests' importer_tests
+          printf '\n' >> "$gates"
+          cat "$gates" >> "$summary"
+          echo "tested-sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Push the data branch and open or update its pull request
+        id: publish
+        if: steps.prepare.outputs.commit == 'true' && github.ref == 'refs/heads/main'
+        timeout-minutes: 5
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_UPDATED_ON: ${{ steps.compare.outputs.source-updated-on }}
+          BRANCH: ${{ steps.prepare.outputs.branch }}
+          NUMBER: ${{ steps.prepare.outputs.number }}
+          TESTED_SHA: ${{ steps.checks.outputs.tested-sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/logs"
+          exec > >(tee "$RUNNER_TEMP/logs/publish.log") 2>&1
+          summary="$RUNNER_TEMP/market-refresh.md"
+          if [[ ! "$BRANCH" =~ ^data/lobster-market-[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "::error::$BRANCH is not a data branch, so nothing was pushed."
+            exit 1
+          fi
+          work="$RUNNER_TEMP/market-data-branch"
+          data=src/data/lobster-market.json
+          committed="$RUNNER_TEMP/committed-market.json"
+          head=$(git -C "$work" rev-parse HEAD)
+          if [[ "$head" != "$TESTED_SHA" ]]; then
+            echo "::error::$head is not the commit the checks tested (${TESTED_SHA:-none}), so nothing was pushed."
+            exit 1
+          fi
+          gh auth setup-git
+          git -C "$work" push --quiet origin "HEAD:refs/heads/$BRANCH"
+          # A new branch left without its pull request would make the next run fail, so remove it on failure.
+          remove_new_branch() {
+            local status=$?
+            [[ "$status" -eq 0 ]] && return
+            echo "::warning::Removing $BRANCH, which this run pushed, because its status or pull request failed."
+            git -C "$work" push --quiet origin ":refs/heads/$BRANCH" ||
+              echo "::warning::Could not delete $BRANCH; delete it before running the workflow again."
+          }
+          if [[ -z "$NUMBER" ]]; then
+            trap remove_new_branch EXIT
+          fi
+          jq -n --arg url "$RUN_URL" '{state: "success", context: "market-refresh/checks", target_url: $url, description: "pnpm test, pnpm build and the importer tests passed on this commit."}' |
+            gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$head" --input - > /dev/null
+
+          sha256=$(jq -r .sourceSha256 "$data")
+          title="Update the lobster market series to the $SOURCE_UPDATED_ON DMR release"
+          changed_years=$(jq -r --slurpfile main "$committed" '
+            ($main[0].observations | map({key: (.year | tostring), value: .}) | from_entries) as $before
+            | [.observations[] | select($before[.year | tostring] != .) | .year | tostring]
+            | if length == 0 then "none" else join(", ") end' "$data")
+          body="$RUNNER_TEMP/pull-request.md"
+          {
+            printf 'The weekly refresh validated a new official Maine DMR lobster table.\n\n'
+            printf -- '- Source published: %s (main has %s)\n' "$SOURCE_UPDATED_ON" "$(jq -r .sourceUpdatedOn "$committed")"
+            printf -- '- Source sha256: `%s`\n' "$sha256"
+            printf -- '- Years %s to %s; new or revised: %s\n' "$(jq -r '.observations[0].year' "$data")" "$(jq -r '.observations[-1].year' "$data")" "$changed_years"
+            printf '\n'
+            cat "$RUNNER_TEMP/checks.md"
+            printf 'These ran in the refresh workflow on %s, recorded as the `market-refresh/checks` status. GitHub does not start other workflows for pull requests opened by this workflow, so **Check** runs when this is merged, before the deploy.\n\n' "$head"
+            printf 'Production keeps serving the snapshot on main until this pull request is merged. Check the series against the table on the [DMR source page](%s) before merging.\n\n' "$(jq -r .sourcePageUrl "$data")"
+            printf 'Opened by the Refresh lobster market data workflow: %s\n' "$RUN_URL"
+          } > "$body"
+          if [[ -z "$NUMBER" ]]; then
+            number=$(jq -n --arg title "$title" --arg head "$BRANCH" --rawfile body "$body" '{title: $title, head: $head, base: "main", body: $body}' |
+              gh api --method POST "repos/$GITHUB_REPOSITORY/pulls" --input - | jq -r .number)
+            printf 'Opened pull request #%s from `%s`.\n\n' "$number" "$BRANCH" >> "$summary"
+          else
+            jq -n --arg title "$title" --rawfile body "$body" '{title: $title, body: $body}' |
+              gh api --method PATCH "repos/$GITHUB_REPOSITORY/pulls/$NUMBER" --input - > /dev/null
+            printf 'Updated pull request #%s on `%s`.\n\n' "$NUMBER" "$BRANCH" >> "$summary"
+          fi
+      - name: Publish run summary
+        id: summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          STEP_RESULTS: ${{ toJSON(steps) }}
+        run: |
+          summary="$RUNNER_TEMP/market-refresh.md"
+          if [[ "$JOB_STATUS" != success ]]; then
+            failed=$(jq -r '[to_entries[] | select(.value.outcome == "failure" or .value.outcome == "cancelled") | .key] | first // ""' <<< "$STEP_RESULTS")
+            log="$RUNNER_TEMP/logs/$failed.log"
+            {
+              printf '### Failed step: `%s`\n\n' "${failed:-unknown}"
+              if [[ -n "$failed" && -s "$log" ]]; then
+                printf 'Last 40 lines of its log:\n\n~~~text\n'
+                tail -n 40 "$log"
+                printf '~~~\n\n'
+              else
+                printf 'See its section above, or the run log.\n\n'
+              fi
+            } >> "$summary"
+          fi
+          [[ -s "$summary" ]] || echo 'No step recorded a summary.' > "$summary"
+          cat "$summary" >> "$GITHUB_STEP_SUMMARY"
+          delimiter="summary_$(openssl rand -hex 16)"
+          { echo "text<<$delimiter"; tail -c 60000 "$summary"; echo; echo "$delimiter"; } >> "$GITHUB_OUTPUT"
+
+  report:
+    name: Report refresh status
+    needs: refresh
+    # Runs even if the run counts as cancelled: a refresh job that hits its timeout ends 'cancelled', like
+    # one a person cancels. The step reads the job's duration from the Jobs API to tell them apart.
+    if: ${{ always() && github.ref == 'refs/heads/main' && needs.refresh.result != 'skipped' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      issues: write
+    steps:
+      - name: Open, update or close the failure issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REFRESH_RESULT: ${{ needs.refresh.result }}
+          REFRESH_SUMMARY: ${{ needs.refresh.outputs.summary }}
+          REFRESH_JOB_NAME: Refresh market series
+          REFRESH_TIMEOUT_MINUTES: 45
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          case "$REFRESH_RESULT" in
+            success) outcome='' ;;
+            failure) outcome='The lobster market refresh failed' ;;
+            cancelled)
+              # A refresh that ran for (nearly) its whole timeout timed out; a shorter one was cancelled.
+              seconds=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?filter=latest&per_page=100" |
+                jq -r --arg name "$REFRESH_JOB_NAME" '
+                  [.jobs[] | select(.name == $name and .started_at and .completed_at)] | first
+                  | if . then (.completed_at | fromdateiso8601) - (.started_at | fromdateiso8601) else "" end')
+              if [[ -z "$seconds" || "$seconds" -lt $((REFRESH_TIMEOUT_MINUTES * 60 - 60)) ]]; then
+                echo "The refresh was cancelled before its timeout (after ${seconds:-an unknown number of} seconds), so nothing is reported." >> "$GITHUB_STEP_SUMMARY"
+                exit 0
+              fi
+              outcome="The lobster market refresh hit its $REFRESH_TIMEOUT_MINUTES-minute job timeout"
+              ;;
+            *) exit 0 ;;
+          esac
+          title='Lobster market refresh is failing'
+          label=market-refresh
+          number=$(gh api "repos/$GITHUB_REPOSITORY/issues?state=open&labels=$label&per_page=100" |
+            jq -r --arg title "$title" '[.[] | select(.pull_request == null and .title == $title)] | sort_by(.number) | first | .number // ""')
+          if [[ -z "$outcome" ]]; then
+            if [[ -n "$number" ]]; then
+              jq -n --arg body "The refresh succeeded in $RUN_URL, so this is resolved." '{body: $body}' |
+                gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$number/comments" --input - > /dev/null
+              jq -n '{state: "closed", state_reason: "completed"}' |
+                gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/$number" --input - > /dev/null
+              echo "Closed issue #$number." >> "$GITHUB_STEP_SUMMARY"
+            fi
+            exit 0
+          fi
+          body="$RUNNER_TEMP/issue.md"
+          {
+            printf '%s (result **%s**) in %s.\n\n' "$outcome" "$REFRESH_RESULT" "$RUN_URL"
+            printf 'Production is unaffected: it serves the snapshot committed in `src/data/lobster-market.json`. If maine.gov is refusing automated requests, download the PDF in a browser and import it with `--source-file` (see docs/lobster-market.md).\n\n'
+            printf '%s\n' "${REFRESH_SUMMARY:-No summary was captured; open the run log.}"
+          } > "$body"
+          if [[ -n "$number" ]]; then
+            jq -n --rawfile body "$body" '{body: $body}' |
+              gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$number/comments" --input - > /dev/null
+            echo "Updated issue #$number." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if ! gh api "repos/$GITHUB_REPOSITORY/labels/$label" > /dev/null 2>&1; then
+            jq -n --arg name "$label" '{name: $name, color: "b60205", description: "Automated lobster market refresh status"}' |
+              gh api --method POST "repos/$GITHUB_REPOSITORY/labels" --input - > /dev/null
+          fi
+          jq -n --arg title "$title" --arg label "$label" --rawfile body "$body" '{title: $title, body: $body, labels: [$label]}' |
+            gh api --method POST "repos/$GITHUB_REPOSITORY/issues" --input - |
+            jq -r '"Opened issue #\(.number)."' >> "$GITHUB_STEP_SUMMARY"
