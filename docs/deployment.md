@@ -4,7 +4,7 @@ One deployment serves one private group. The operator signs in first with a conf
 
 ## 1. Choose an origin and create a database
 
-Install the dependencies as described in [local development](development.md). Choose your Worker name and an HTTPS origin for it, such as `https://ledger.example.com`. Set up a [Worker custom domain](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/) for that example, or use the final `workers.dev` hostname of your Worker.
+Install the dependencies as described in [local development](development.md). Choose your Worker name and an HTTPS origin for it, such as `https://ledger.example.com`. For a custom domain, choose a hostname in an active Cloudflare zone you control. You will attach it to the Worker in step 4. You can also use the final `workers.dev` hostname.
 
 Sign in to Cloudflare, confirm the target account, and create a D1 database for this ledger. Decline any prompt to update the checked-in local configuration.
 
@@ -45,6 +45,8 @@ Set the required Google client secret before the first application deployment. S
 pnpm exec wrangler secret put GOOGLE_CLIENT_SECRET --config wrangler.production.json
 ```
 
+If you chose a custom domain, the Worker now exists. Open its **Settings → Domains & Routes → Add → Custom Domain** in Cloudflare and enter the hostname from step 1. Allow time for the certificate to become active before testing sign-in. [Cloudflare custom domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)
+
 Apply the D1 migrations and publish the application to that Worker.
 
 ```sh
@@ -52,7 +54,7 @@ pnpm exec wrangler d1 migrations apply DB --remote --config wrangler.production.
 pnpm exec wrangler deploy --config wrangler.production.json
 ```
 
-For later releases, `pnpm deploy` regenerates the deployment configuration from the current shell inputs, builds, migrates, and deploys. To automate releases, see [GitHub and deployment automation](github.md). Keep migrations compatible with the currently running Worker because they are applied before deployment.
+For later releases, `pnpm run deploy` regenerates the deployment configuration from the current shell inputs, builds, migrates, and deploys. To automate releases, see [GitHub and deployment automation](github.md). Keep migrations compatible with the currently running Worker because they are applied before deployment.
 
 ## 5. Verify the live deployment
 

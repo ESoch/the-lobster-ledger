@@ -27,6 +27,10 @@ Set the repository variable `ENABLE_MARKET_REFRESH` to `true` to enable the refr
 
 The workflow runs the pull request checks before pushing the update branch and records the result as the `market-refresh/checks` commit status. GitHub prevents most events created by `GITHUB_TOKEN` from starting additional workflows. Review the status and compare changed years with the upstream source. Merging the update by hand starts the usual main workflow. See the [market data guide](lobster-market.md#refreshing-a-snapshot-locally) for a manual import when the source blocks automated requests.
 
+## Dependency updates
+
+Dependabot checks GitHub Actions versions weekly. To receive security update pull requests for vulnerable npm packages or the Python market importer, enable Dependabot alerts and security updates in the repository settings. The Python manifest is in `scripts/`. Ordinary version updates for these two ecosystems are handled separately.
+
 ## Database changes and recovery
 
 Migrations run before the new Worker is published. Keep them compatible with the running code. A migration failure stops publication. For code recovery, prefer a revert pull request to keep `main` and the deployment aligned. An urgent Cloudflare Worker rollback leaves D1 data and applied migrations as they are. See [Cloudflare’s rollback limitations](https://developers.cloudflare.com/workers/versions-and-deployments/rollbacks/).

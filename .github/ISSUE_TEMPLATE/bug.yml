@@ -3,7 +3,7 @@ description: Report something that behaved differently than expected.
 body:
   - type: markdown
     attributes:
-      value: Use fictional wagers and members. For a security issue, follow SECURITY.md to contact a maintainer privately.
+      value: Use fictional wagers and members. For a security issue, use the private reporting instructions in SECURITY.md.
   - type: textarea
     id: reproduce
     attributes:
@@ -15,4 +15,4 @@ body:
     id: environment
     attributes:
       label: Where did it happen?
-      description: Include the browser or CLI version and whether you used the hosted demo, local development, or a self-hosted ledger.
+      description: Include the browser or CLI version and whether you used the local demo or a self-hosted ledger.

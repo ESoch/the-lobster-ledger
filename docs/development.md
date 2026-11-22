@@ -4,7 +4,9 @@
 
 Use Node.js 24.21.0 (see [`.node-version`](../.node-version)) and pnpm 10.30.3 (see [`package.json`](../package.json)).
 
-From the repository root, install the locked dependencies and start Vite.
+Install the pinned tools if you need them. [Node.js downloads](https://nodejs.org/en/download) · [pnpm installation](https://pnpm.io/installation)
+
+Open a terminal at the root of the cloned repository, install the locked dependencies, and start Vite.
 
 ```sh
 pnpm install --frozen-lockfile
