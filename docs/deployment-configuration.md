@@ -1,10 +1,12 @@
-# Private deployment configuration
+# Deployment settings
 
 The checked-in `wrangler.jsonc` configures local development and CI packaging. Production uses a generated `wrangler.production.json` in the repository root. It contains the deployment owner's email and environment-specific identifiers. Git ignores this file.
 
-## Existing deployment
+## Configure the target
 
-Before merging the configuration change, copy the existing Worker settings into the GitHub **production** environment under **Settings → Environments → production**. Keep the same Cloudflare account, Worker name, D1 UUID, OAuth client, origin, owner, and rate-limit namespace. The Cloudflare dashboard shows the Worker bindings and variables. Keeping the same D1 UUID preserves the ledger and its migration history.
+For a manual deployment, supply the configuration variables and `OWNER_EMAIL` in the shell that runs the generator. Wrangler uses your Cloudflare login. For GitHub Actions, add these settings to the `production` environment under **Settings → Environments → production**. Actions also needs a scoped `CLOUDFLARE_API_TOKEN`.
+
+When updating an existing ledger, keep the Worker name, D1 UUID, origin, owner, OAuth client and rate-limit namespace for that instance. The Cloudflare dashboard shows the Worker bindings. Using the same D1 database preserves the ledger and its migration history.
 
 | GitHub production setting                            | Source                                                                                                                                       |
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -14,14 +16,14 @@ Before merging the configuration change, copy the existing Worker settings into 
 | Variable `GOOGLE_CLIENT_ID`                          | Google OAuth web client ID for this deployment.                                                                                              |
 | Variable `RATE_LIMIT_NAMESPACE_ID`                   | Positive integer dedicated to this application's rate limiter within the Cloudflare account. Reuse the current value for an existing Worker. |
 | Secret `OWNER_EMAIL`                                 | Verified Google email address of the person who should gain owner access.                                                                    |
-| Secret `CLOUDFLARE_API_TOKEN`                        | Existing deploy token scoped to the account, with Worker deployment and D1 migration access.                                                 |
+| Secret `CLOUDFLARE_API_TOKEN`                        | GitHub Actions deploy token scoped to the account, with Worker deployment and D1 migration access.                                           |
 | Optional variables `WORKER_NAME`, `D1_DATABASE_NAME` | Both default to `lobster-ledger`. Set each to the actual resource name if different.                                                         |
 
 The Worker secret `GOOGLE_CLIENT_SECRET` lives in Cloudflare. Preserve it on the existing Worker. A fresh deployment needs its own Google web client, correct callback URL, and corresponding Worker secret. The generated file contains only the _name_ of that required secret.
 
 ## Generate a configuration locally
 
-From the repository root, supply the table's variables and `OWNER_EMAIL` to the process using your shell or secret manager. Then run:
+From the repository root, supply the configuration variables and `OWNER_EMAIL` using your shell or secret manager. Then run:
 
 ```sh
 node scripts/production-config.mjs
