@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { ApiError } from '../lib/client';
 import { normalizeOrigin } from '../lib/cli-origin';
+import { EXAMPLE_LEDGER_ORIGIN, HOSTED_DEMO, SELF_HOSTING_URL } from '../lib/hosted-demo';
 import { CopyBlock, InlineCommand } from './CopyBlock';
 import { focusPageHeading } from './ui';
 import {
@@ -132,7 +133,7 @@ export function CliAuthorization({
   signInAvailable?: boolean;
   signInUnavailableReason?: string;
 }) {
-  const address = cliOrigin(origin);
+  const address = cliOrigin(HOSTED_DEMO ? EXAMPLE_LEDGER_ORIGIN : origin);
   const loginCommand = address ? cliCommand(address, 'auth login') : null;
   const [busy, setBusy] = useState(false);
   // A failure Allow can be pressed again after (a lost connection, a busy server) keeps the card as it
@@ -258,8 +259,17 @@ export function CliAuthorization({
         {/* In the demo this is the page's only demo notice; the guide leaves its own out. */}
         {demo && (
           <p className="cli-demo-notice">
-            The demo cannot authorize a CLI, so there is no Allow button here. To connect your own
-            command line, open the <a href="/">live ledger</a> and sign in.
+            {HOSTED_DEMO ? (
+              <>
+                To authorize a CLI, <a href={SELF_HOSTING_URL}>set up your own ledger</a> and sign
+                in there.
+              </>
+            ) : (
+              <>
+                The demo cannot authorize a CLI, so there is no Allow button here. To connect your
+                own command line, open the <a href="/">live ledger</a> and sign in.
+              </>
+            )}
           </p>
         )}
         {problem ? (
@@ -585,11 +595,13 @@ export function CliGuide({
 }) {
   const address = cliOrigin(origin);
   const local = address?.protocol === 'http:';
+  const ledgerAddress = HOSTED_DEMO ? new URL(EXAMPLE_LEDGER_ORIGIN) : address;
   const copyCommand = (label: string, command: string) =>
-    address && <CopyBlock label={label} value={cliCommand(address, command)} />;
+    ledgerAddress && <CopyBlock label={label} value={cliCommand(ledgerAddress, command)} />;
   const installPath = local
     ? `./dist/downloads/${CLI_ARCHIVE}`
-    : address && shellAddress(`${address.origin}/downloads/${CLI_ARCHIVE}`);
+    : address &&
+      shellAddress(`${address.origin}${import.meta.env.BASE_URL}downloads/${CLI_ARCHIVE}`);
   return (
     <div className="cli-guide">
       <header className="page-heading">
@@ -603,8 +615,17 @@ export function CliGuide({
       </header>
       {demo && !authorization && (
         <p className="connection-notice" role="status">
-          This demo cannot connect a CLI. Open your <a href="/">live ledger</a> and sign in to
-          connect a real account.
+          {HOSTED_DEMO ? (
+            <>
+              To connect the CLI, <a href={SELF_HOSTING_URL}>set up your own ledger</a> and replace{' '}
+              <code>{EXAMPLE_LEDGER_ORIGIN}</code> in the commands with its address.
+            </>
+          ) : (
+            <>
+              This demo cannot connect a CLI. Open your <a href="/">live ledger</a> and sign in to
+              connect a real account.
+            </>
+          )}
         </p>
       )}
       {authorization}

@@ -2,7 +2,9 @@
 
 A self-hosted ledger for friends who settle bets in lobster rolls. Agree on the stakes, record who won, and see who owes lunch. Both bettors confirm the result and the delivery.
 
-[Try the local demo](#try-the-local-demo) · [Self-host a ledger](docs/deployment.md) · [Contribute](CONTRIBUTING.md)
+[Try the live demo](https://esoch.github.io/the-lobster-ledger/) · [Run it locally](#try-the-local-demo) · [Self-host a ledger](docs/deployment.md) · [Contribute](CONTRIBUTING.md)
+
+The live demo opens a fictional ledger. Create a wager, switch bettors to approve it, and see who owes a roll. Your changes stay in your browser.
 
 ![Demo ledger overview with rolls owed, recent wagers, and actions awaiting approval](docs/images/demo-overview.jpg)
 
